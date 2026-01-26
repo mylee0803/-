@@ -1,0 +1,25 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import MyCellar from './pages/MyCellar';
+import TastingNotes from './pages/TastingNotes';
+import Statistics from './pages/Statistics';
+import AddEntry from './pages/AddEntry';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="cellar" element={<MyCellar />} />
+          <Route path="notes" element={<TastingNotes />} />
+          <Route path="statistics" element={<Statistics />} />
+          <Route path="add" element={<AddEntry />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;

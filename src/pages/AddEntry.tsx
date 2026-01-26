@@ -1,14 +1,16 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
+import { Camera } from 'lucide-react';
 import Input from '../components/ui/Input';
 import Select from '../components/ui/Select';
 import TextArea from '../components/ui/TextArea';
 import Rating from '../components/ui/Rating';
 import Button from '../components/ui/Button';
-import { submitWineEntry, type WineSubmission } from '../services/api';
+import { submitWineEntry, analyzeWineLabel, type WineSubmission } from '../services/api';
 import type { WineType } from '../types/wine';
 
 export default function AddEntry() {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     // We keep some fields as strings for easier input handling, then convert on submit
     const [formData, setFormData] = useState({
@@ -24,6 +26,52 @@ export default function AddEntry() {
         tastingDate: new Date().toISOString().split('T')[0],
         notes: ''
     });
+
+    const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+            setIsAnalyzing(true);
+            const reader = new FileReader();
+
+            reader.onloadend = async () => {
+                try {
+                    const base64String = reader.result as string;
+                    // Send to n8n for analysis
+                    const result = await analyzeWineLabel(base64String);
+
+                    // Update form with result
+                    setFormData(prev => ({
+                        ...prev,
+                        name: result["와인명"] || prev.name,
+                        producer: result["생산자"] || prev.producer,
+                        vintage: (result["빈티지"] || prev.vintage).toString(),
+                        type: (result["종류"] as WineType) || prev.type,
+                        region: result["지역"] || prev.region,
+                        country: result["국가"] || prev.country,
+                        // Optional fields if provided by analysis:
+                        price: result["가격"] ? result["가격"].toString() : prev.price,
+                    }));
+
+                    alert('🎉 Label analyzed! Form updated.');
+                } catch (error) {
+                    console.error('Analysis failed:', error);
+                    alert('Failed to analyze wine label. Please try again.');
+                } finally {
+                    setIsAnalyzing(false);
+                    // Reset file input
+                    e.target.value = '';
+                }
+            };
+
+            reader.readAsDataURL(file);
+
+        } catch (error) {
+            console.error('Error reading file:', error);
+            setIsAnalyzing(false);
+        }
+    };
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -93,6 +141,34 @@ export default function AddEntry() {
 
                 {/* Core Info Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-stone-700 mb-2">
+                            Auto-fill from Photo
+                        </label>
+                        <div className="flex gap-4 items-center">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                id="wine-label-upload"
+                                onChange={handleImageUpload}
+                                disabled={isAnalyzing || isSubmitting}
+                            />
+                            <label
+                                htmlFor="wine-label-upload"
+                                className={`
+                                    flex items-center gap-2 px-4 py-2 rounded-lg border border-stone-200 
+                                    text-stone-700 bg-white hover:bg-stone-50 cursor-pointer transition-colors
+                                    ${(isAnalyzing || isSubmitting) ? 'opacity-50 cursor-not-allowed' : ''}
+                                `}
+                            >
+                                <Camera className="w-5 h-5 text-wine-600" />
+                                <span>{isAnalyzing ? 'Analyzing...' : 'Take Photo / Upload'}</span>
+                            </label>
+                            {isAnalyzing && <span className="text-sm text-stone-500 animate-pulse">Analyzing label...</span>}
+                        </div>
+                    </div>
+
                     <Input
                         label="Wine Name"
                         name="name"
@@ -213,7 +289,6 @@ export default function AddEntry() {
                         {isSubmitting ? 'Saving...' : 'Save Entry'}
                     </Button>
                 </div>
-
             </form>
         </div>
     )

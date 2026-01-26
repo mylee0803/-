@@ -22,6 +22,7 @@ function getWebhookUrl(baseUrlOrFullUrl: string | undefined, path: string): stri
 
 export async function submitWineEntry(data: WineSubmission): Promise<void> {
     const webhookUrl = getWebhookUrl(import.meta.env.VITE_N8N_WEBHOOK_URL, 'wine-entry');
+    console.log('[API] Submitting entry to:', webhookUrl);
 
     const response = await fetch(webhookUrl, {
         method: 'POST',
@@ -38,6 +39,7 @@ export async function submitWineEntry(data: WineSubmission): Promise<void> {
 
 export async function fetchWines(): Promise<any[]> {
     const listUrl = getWebhookUrl(import.meta.env.VITE_N8N_LIST_URL, 'get-wines');
+    console.log('[API] Fetching wines from:', listUrl);
 
     const response = await fetch(listUrl);
 
@@ -50,6 +52,7 @@ export async function fetchWines(): Promise<any[]> {
 
 export async function analyzeWineLabel(base64Image: string): Promise<Partial<WineSubmission>> {
     const analysisUrl = getWebhookUrl(import.meta.env.VITE_N8N_ANALYSIS_WEBHOOK_URL, 'analyze-label');
+    console.log('[API] Analyzing label with URL:', analysisUrl);
 
     // Remove data:image/jpeg;base64, prefix if present
     const base64Data = base64Image.replace(/^data:image\/[a-z]+;base64,/, "");

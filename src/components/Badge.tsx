@@ -8,30 +8,31 @@ interface BadgeProps {
 }
 
 export default function Badge({ children, type, className = '' }: BadgeProps) {
-    let colorStyles = "bg-stone-100 text-stone-700";
+    let colorStyles = "bg-stone-100 text-stone-700 ring-1 ring-stone-200";
 
     switch (type) {
         case 'Red':
-            colorStyles = "bg-wine-50 text-wine-700 ring-1 ring-wine-100";
+            colorStyles = "bg-red-50 text-red-900 ring-1 ring-red-100";
             break;
         case 'White':
-            colorStyles = "bg-yellow-50 text-yellow-700 ring-1 ring-yellow-100";
+            colorStyles = "bg-yellow-50 text-yellow-800 ring-1 ring-yellow-200/50";
             break;
         case 'Rose':
-            colorStyles = "bg-rose-50 text-rose-700 ring-1 ring-rose-100";
+            colorStyles = "bg-rose-50 text-rose-900 ring-1 ring-rose-200/50";
             break;
         case 'Sparkling':
-            colorStyles = "bg-sky-50 text-sky-700 ring-1 ring-sky-100";
+            colorStyles = "bg-sky-50 text-sky-900 ring-1 ring-sky-200/50";
             break;
         case 'Dessert':
-            colorStyles = "bg-amber-50 text-amber-700 ring-1 ring-amber-100";
+            colorStyles = "bg-amber-50 text-amber-900 ring-1 ring-amber-200/50";
             break;
-        default:
-            colorStyles = "bg-stone-100 text-stone-700 ring-1 ring-stone-200";
+        case 'Fortified':
+            colorStyles = "bg-purple-50 text-purple-900 ring-1 ring-purple-200/50";
+            break;
     }
 
     return (
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colorStyles} ${className}`}>
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide uppercase ${colorStyles} ${className}`}>
             {children}
         </span>
     );

@@ -12,10 +12,7 @@ export default function Layout() {
         <div className="min-h-screen bg-stone-50 text-stone-800 font-sans pb-20 md:pb-0 selection:bg-wine-100 selection:text-wine-900">
             {/* Mobile Header (Page Specific) */}
             <header className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-stone-100 h-14 px-4 flex items-center justify-between md:hidden">
-                <Link to="/" className="font-serif text-xl font-bold text-wine-950 flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-wine-600 flex items-center justify-center text-white text-xs italic">W</span>
-                    Wine Diary
-                </Link>
+
                 <div className="flex items-center gap-3">
                     <button className="p-1 text-stone-600 hover:text-wine-600">
                         <Search className="w-5 h-5" />
@@ -34,14 +31,7 @@ export default function Layout() {
             <nav className="hidden md:block fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-stone-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-20">
-                        <Link to="/" className="flex-shrink-0 flex items-center gap-3 decoration-0">
-                            <div className="w-8 h-8 rounded-full bg-wine-600 flex items-center justify-center">
-                                <span className="text-white font-serif italic text-lg pr-0.5">W</span>
-                            </div>
-                            <span className="font-serif text-2xl font-semibold tracking-tight text-wine-950">
-                                Wine Diary
-                            </span>
-                        </Link>
+
                         <div className="ml-10 flex items-baseline space-x-8">
                             <Link to="/" className="text-stone-500 hover:text-wine-700 font-medium transition-colors">홈</Link>
                             <Link to="/cellar" className="text-stone-500 hover:text-wine-700 font-medium transition-colors">다이어리</Link>

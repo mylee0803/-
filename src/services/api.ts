@@ -28,6 +28,7 @@ export async function submitWineEntry(data: WineSubmission): Promise<void> {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning page
         },
         body: JSON.stringify(data),
     });
@@ -41,7 +42,11 @@ export async function fetchWines(): Promise<any[]> {
     const listUrl = getWebhookUrl(import.meta.env.VITE_N8N_LIST_URL, 'get-wines');
     console.log('[API] Fetching wines from:', listUrl);
 
-    const response = await fetch(listUrl);
+    const response = await fetch(listUrl, {
+        headers: {
+            'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning page
+        },
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to fetch wines: ${response.statusText}`);
@@ -61,6 +66,7 @@ export async function analyzeWineLabel(base64Image: string): Promise<Partial<Win
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning page
         },
         body: JSON.stringify({ image: base64Data }),
     });

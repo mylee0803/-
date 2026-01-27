@@ -133,8 +133,8 @@ export default function AddEntry() {
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="mb-8">
-                <h1 className="text-3xl font-serif font-bold text-wine-950">Add New Wine</h1>
-                <p className="text-stone-500 mt-2">Record your tasting notes and build your cellar.</p>
+                <h1 className="text-3xl font-serif font-bold text-wine-950">와인 등록하기</h1>
+                <p className="text-stone-500 mt-2">테이스팅 노트를 기록하고 나만의 셀러를 만들어보세요.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 md:p-8 border border-stone-100 shadow-sm space-y-6">
@@ -143,7 +143,7 @@ export default function AddEntry() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="md:col-span-2">
                         <label className="block text-sm font-medium text-stone-700 mb-2">
-                            Auto-fill from Photo
+                            사진으로 자동 입력
                         </label>
                         <div className="flex gap-4 items-center flex-wrap">
                             <input
@@ -174,7 +174,7 @@ export default function AddEntry() {
                                 `}
                             >
                                 <Camera className="w-5 h-5 text-wine-600" />
-                                <span>Camera</span>
+                                <span>카메라</span>
                             </label>
 
                             {/* Gallery Button */}
@@ -191,17 +191,17 @@ export default function AddEntry() {
                                     <circle cx="9" cy="9" r="2" />
                                     <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                                 </svg>
-                                <span>Gallery</span>
+                                <span>갤러리</span>
                             </label>
 
-                            {isAnalyzing && <span className="text-sm text-stone-500 animate-pulse">Analyzing...</span>}
+                            {isAnalyzing && <span className="text-sm text-stone-500 animate-pulse">분석 중...</span>}
                         </div>
                     </div>
 
                     <Input
-                        label="Wine Name"
+                        label="와인명"
                         name="name"
-                        placeholder="e.g. Château Margaux"
+                        placeholder="예: Château Margaux"
                         value={formData.name}
                         onChange={handleChange}
                         required
@@ -210,34 +210,34 @@ export default function AddEntry() {
                     />
 
                     <Input
-                        label="Producer"
+                        label="생산자"
                         name="producer"
-                        placeholder="e.g. Château Margaux"
+                        placeholder="예: Château Margaux"
                         value={formData.producer}
                         onChange={handleChange}
                         disabled={isSubmitting}
                     />
 
                     <Input
-                        label="Vintage"
+                        label="빈티지"
                         name="vintage"
                         type="number"
-                        placeholder="e.g. 2015"
+                        placeholder="예: 2015"
                         value={formData.vintage}
                         onChange={handleChange}
                         disabled={isSubmitting}
                     />
 
                     <Select
-                        label="Type"
+                        label="와인 종류"
                         name="type"
                         options={[
-                            { value: 'Red', label: 'Red' },
-                            { value: 'White', label: 'White' },
-                            { value: 'Rose', label: 'Rosé' },
-                            { value: 'Sparkling', label: 'Sparkling' },
-                            { value: 'Dessert', label: 'Dessert' },
-                            { value: 'Fortified', label: 'Fortified' },
+                            { value: 'Red', label: '레드' },
+                            { value: 'White', label: '화이트' },
+                            { value: 'Rose', label: '로제' },
+                            { value: 'Sparkling', label: '스파클링' },
+                            { value: 'Dessert', label: '디저트' },
+                            { value: 'Fortified', label: '주정강화' },
                         ]}
                         value={formData.type}
                         onChange={handleChange}
@@ -245,18 +245,18 @@ export default function AddEntry() {
                     />
 
                     <Input
-                        label="Region"
+                        label="지역"
                         name="region"
-                        placeholder="e.g. Bordeaux"
+                        placeholder="예: Bordeaux"
                         value={formData.region}
                         onChange={handleChange}
                         disabled={isSubmitting}
                     />
 
                     <Input
-                        label="Country"
+                        label="국가"
                         name="country"
-                        placeholder="e.g. France"
+                        placeholder="예: France"
                         value={formData.country}
                         onChange={handleChange}
                         disabled={isSubmitting}
@@ -268,15 +268,15 @@ export default function AddEntry() {
                 {/* Tasting Details */}
                 <div className="space-y-6">
                     <Rating
-                        label="Rating"
+                        label="평점"
                         value={formData.rating}
                         onChange={(val) => setFormData(prev => ({ ...prev, rating: val }))}
                     />
 
                     <TextArea
-                        label="Tasting Notes"
+                        label="테이스팅 노트"
                         name="notes"
-                        placeholder="Describe the appearance, nose, palate, and finish..."
+                        placeholder="색상, 향, 맛, 피니시 등을 기록해보세요..."
                         rows={5}
                         value={formData.notes}
                         onChange={handleChange}
@@ -285,7 +285,7 @@ export default function AddEntry() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <Input
-                            label="Tasting Date"
+                            label="시음일"
                             name="tastingDate"
                             type="date"
                             value={formData.tastingDate}
@@ -293,18 +293,18 @@ export default function AddEntry() {
                             disabled={isSubmitting}
                         />
                         <Input
-                            label="Price"
+                            label="가격"
                             name="price"
                             type="number"
-                            placeholder="e.g. 50"
+                            placeholder="예: 50000"
                             value={formData.price}
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
                         <Input
-                            label="Purchased At"
+                            label="구매처"
                             name="purchasedAt"
-                            placeholder="e.g. Local Shop"
+                            placeholder="예: 와인나라"
                             value={formData.purchasedAt}
                             onChange={handleChange}
                             disabled={isSubmitting}
@@ -313,9 +313,9 @@ export default function AddEntry() {
                 </div>
 
                 <div className="pt-6 flex justify-end gap-3">
-                    <Button type="button" variant="ghost" disabled={isSubmitting}>Cancel</Button>
+                    <Button type="button" variant="ghost" disabled={isSubmitting}>취소</Button>
                     <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Saving...' : 'Save Entry'}
+                        {isSubmitting ? '저장 중...' : '저장하기'}
                     </Button>
                 </div>
             </form>

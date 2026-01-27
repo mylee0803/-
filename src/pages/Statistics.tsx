@@ -37,26 +37,26 @@ export default function Statistics() {
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="mb-10">
-                <h1 className="text-3xl font-serif font-bold text-wine-950">Cellar Statistics</h1>
-                <p className="text-stone-500 mt-2">Insights into your collection and preferences.</p>
+                <h1 className="text-3xl font-serif font-bold text-wine-950">셀러 통계</h1>
+                <p className="text-stone-500 mt-2">내 와인 컬렉션과 취향에 대한 분석입니다.</p>
             </div>
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <StatCard
-                    label="Total Wines"
+                    label="총 보유 와인"
                     value={stats.totalWines}
                     icon={<WineIcon />}
                     trend="+2 this month"
                 />
                 <StatCard
-                    label="Average Rating"
+                    label="평균 평점"
                     value={stats.avgRating}
                     icon={<StarIcon />}
                     trend="Top 10%"
                 />
                 <StatCard
-                    label="Total Value"
+                    label="총 가치"
                     value={`$${stats.totalValue.toLocaleString()}`}
                     icon={<MoneyIcon />}
                 />
@@ -69,8 +69,8 @@ export default function Statistics() {
                 {/* Placeholder for future charts */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 flex items-center justify-center text-stone-400 h-96">
                     <div className="text-center">
-                        <p className="text-lg font-medium">Coming Soon</p>
-                        <p className="text-sm">More insights on vintage and region.</p>
+                        <p className="text-lg font-medium">준비 중</p>
+                        <p className="text-sm">빈티지 및 지역 분석 기능이 곧 추가됩니다.</p>
                     </div>
                 </div>
             </div>

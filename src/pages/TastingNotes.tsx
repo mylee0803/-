@@ -19,9 +19,9 @@ export default function TastingNotes() {
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="text-center mb-12">
-                <h1 className="text-4xl font-serif font-bold text-wine-950 mb-4">Tasting Journal</h1>
+                <h1 className="text-4xl font-serif font-bold text-wine-950 mb-4">테이스팅 저널</h1>
                 <p className="text-lg text-stone-500 max-w-2xl mx-auto">
-                    A collection of your sensory experiences. Revisit the flavors and memories of every bottle.
+                    나만의 감각적인 기록. 모든 와인의 향과 추억을 다시 떠올려보세요.
                 </p>
             </div>
 
@@ -29,7 +29,7 @@ export default function TastingNotes() {
                 <div className="max-w-xl mx-auto">
                     <Input
                         label=""
-                        placeholder="Search notes by name, producer, or flavor..."
+                        placeholder="이름, 생산자, 향 등으로 검색..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="shadow-sm"
@@ -44,7 +44,7 @@ export default function TastingNotes() {
                     ))
                 ) : (
                     <div className="text-center py-12">
-                        <p className="text-stone-500">No tasting notes found matching your search.</p>
+                        <p className="text-stone-500">검색 결과와 일치하는 테이스팅 노트가 없습니다.</p>
                     </div>
                 )}
             </div>

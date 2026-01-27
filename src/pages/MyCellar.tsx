@@ -46,7 +46,7 @@ export default function MyCellar() {
         return (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-wine-900 mx-auto mb-4"></div>
-                <p className="text-stone-500">Loading your cellar...</p>
+                <p className="text-stone-500">셀러를 불러오는 중입니다...</p>
             </div>
         );
     }
@@ -55,7 +55,7 @@ export default function MyCellar() {
         return (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
                 <p className="text-red-600 mb-4">{error}</p>
-                <Button onClick={() => window.location.reload()}>Try Again</Button>
+                <Button onClick={() => window.location.reload()}>다시 시도</Button>
             </div>
         );
     }
@@ -64,11 +64,11 @@ export default function MyCellar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-serif font-bold text-wine-950">My Cellar</h1>
-                    <p className="text-stone-500 mt-2">Manage your collection and view detailed tasting notes.</p>
+                    <h1 className="text-3xl font-serif font-bold text-wine-950">내 와인 셀러</h1>
+                    <p className="text-stone-500 mt-2">나만의 와인 컬렉션을 관리하고 상세한 시음 노트를 확인하세요.</p>
                 </div>
                 <Link to="/add">
-                    <Button>Add New Wine</Button>
+                    <Button>와인 등록</Button>
                 </Link>
             </div>
 
@@ -77,7 +77,7 @@ export default function MyCellar() {
                 <div className="w-full md:w-96">
                     <Input
                         label=""
-                        placeholder="Search wines..."
+                        placeholder="와인 검색..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full"
@@ -87,20 +87,20 @@ export default function MyCellar() {
                     <Select
                         label=""
                         options={[
-                            { value: 'All', label: 'All Types' },
-                            { value: 'Red', label: 'Red' },
-                            { value: 'White', label: 'White' },
-                            { value: 'Rose', label: 'Rosé' },
-                            { value: 'Sparkling', label: 'Sparkling' },
-                            { value: 'Dessert', label: 'Dessert' },
-                            { value: 'Fortified', label: 'Fortified' },
+                            { value: 'All', label: '전체 종류' },
+                            { value: 'Red', label: '레드' },
+                            { value: 'White', label: '화이트' },
+                            { value: 'Rose', label: '로제' },
+                            { value: 'Sparkling', label: '스파클링' },
+                            { value: 'Dessert', label: '디저트' },
+                            { value: 'Fortified', label: '주정강화' },
                         ]}
                         value={selectedType}
                         onChange={(e) => setSelectedType(e.target.value)}
                     />
                 </div>
                 <div className="ml-auto text-sm text-stone-500">
-                    Showing <span className="font-semibold text-wine-900">{filteredWines.length}</span> wines
+                    총 <span className="font-semibold text-wine-900">{filteredWines.length}</span>개의 와인
                 </div>
             </div>
 
@@ -118,10 +118,10 @@ export default function MyCellar() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                         </svg>
                     </div>
-                    <h3 className="text-lg font-medium text-stone-900">No wines found</h3>
-                    <p className="text-stone-500 mt-1">Try adjusting your search or add a new wine.</p>
+                    <h3 className="text-lg font-medium text-stone-900">등록된 와인이 없습니다</h3>
+                    <p className="text-stone-500 mt-1">검색어를 변경하거나 새로운 와인을 등록해보세요.</p>
                     <Link to="/add" className="inline-block mt-4">
-                        <Button variant="outline" size="sm">Add Wine</Button>
+                        <Button variant="outline" size="sm">와인 등록</Button>
                     </Link>
                 </div>
             )}

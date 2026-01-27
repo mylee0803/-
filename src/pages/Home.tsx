@@ -1,119 +1,122 @@
+import { ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
     return (
-        <>
-            {/* Hero Section */}
-            <div className="relative pt-20 pb-16 md:pt-32 md:pb-24 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div className="text-center">
-                        <h1 className="text-5xl md:text-7xl font-serif font-bold text-wine-950 mb-6 tracking-tight">
-                            와인의 <span className="text-wine-600 italic">모든 순간</span>
-                        </h1>
-                        <p className="mt-4 max-w-2xl mx-auto text-xl text-stone-600 font-light leading-relaxed">
-                            나만의 디지털 소믈리에. 테이스팅 여정을 기록하고, 취향의 패턴을 발견하며, 꿈의 셀러를 완성해보세요.
-                        </p>
-                        <div className="mt-10 flex justify-center gap-4">
-                            <button className="bg-wine-600 text-white px-8 py-3.5 rounded-full hover:bg-wine-700 transition-all shadow-lg hover:shadow-wine-200/50 text-lg font-medium">
-                                테이스팅 시작하기
-                            </button>
-                            <button className="bg-white text-wine-700 border border-stone-200 px-8 py-3.5 rounded-full hover:bg-stone-50 transition-all shadow-sm hover:shadow text-lg font-medium">
-                                컬렉션 둘러보기
-                            </button>
-                        </div>
-                    </div>
+        <div className="pb-8">
+            {/* Banner Section */}
+            <div className="relative w-full bg-stone-900 aspect-[4/3] md:aspect-[21/9] overflow-hidden">
+                <img
+                    src="https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=2000"
+                    alt="Wine Collection"
+                    className="w-full h-full object-cover opacity-80"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6 md:p-12">
+                    <span className="text-wine-400 font-serif italic text-lg mb-2">Since 2012</span>
+                    <h2 className="text-white text-3xl md:text-5xl font-serif font-bold leading-tight mb-2">
+                        선도하는 <br /> 프리미엄 컬렉션
+                    </h2>
+                    <p className="text-stone-300 text-sm md:text-base">1/23(금) ~ 2/13(금) 한정 혜택</p>
                 </div>
-
-                {/* Abstract Background Decoration */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-30 pointer-events-none">
-                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-wine-200 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
-                    <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gold-200 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
-                    <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-100 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
+                <div className="absolute bottom-6 right-6 bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full">
+                    1 / 5 | 전체보기
                 </div>
             </div>
 
-            {/* Recent Entries Section Preview */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-3xl font-serif font-bold text-wine-950">최근 테이스팅 노트</h2>
-                    <a href="#" className="text-wine-600 hover:text-wine-800 font-medium flex items-center gap-1">
-                        전체 보기 <span aria-hidden="true">&rarr;</span>
-                    </a>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {/* Card 1 */}
-                    <div className="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all border border-stone-100 cursor-pointer">
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="bg-wine-50 text-wine-700 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">레드</div>
-                            <span className="text-stone-400 text-sm">2일 전</span>
-                        </div>
-                        <h3 className="text-xl font-serif font-bold text-stone-900 mb-2 group-hover:text-wine-700 transition-colors">Château Margaux 2015</h3>
-                        <div className="flex items-center gap-1 mb-4">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <svg key={star} className="w-5 h-5 text-gold-500 fill-current" viewBox="0 0 24 24">
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                </svg>
-                            ))}
-                        </div>
-                        <p className="text-stone-600 line-clamp-3 mb-4 text-sm leading-relaxed">
-                            놀라울 정도의 깊이와 복합미. 블랙커런트와 제비꽃의 향, 미묘한 흙 내음이 어우러짐. 타닌은 비단처럼 부드러움.
-                        </p>
-                        <div className="pt-4 border-t border-stone-100 flex items-center justify-between">
-                            <span className="text-sm text-stone-500 font-medium">Bordeaux, France</span>
-                        </div>
+            {/* Quick Menu */}
+            <div className="grid grid-cols-4 gap-4 px-4 py-8 bg-white border-b border-stone-100 mb-2">
+                <Link to="/cellar" className="flex flex-col items-center gap-2">
+                    <div className="w-14 h-14 rounded-2xl bg-orange-500 flex items-center justify-center text-white shadow-lg shadow-orange-100">
+                        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
                     </div>
-
-                    {/* Card 2 */}
-                    <div className="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all border border-stone-100 cursor-pointer">
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">화이트</div>
-                            <span className="text-stone-400 text-sm">5일 전</span>
-                        </div>
-                        <h3 className="text-xl font-serif font-bold text-stone-900 mb-2 group-hover:text-wine-700 transition-colors">Cloudy Bay Sauvignon Blanc</h3>
-                        <div className="flex items-center gap-1 mb-4">
-                            {[1, 2, 3, 4].map((star) => (
-                                <svg key={star} className="w-5 h-5 text-gold-500 fill-current" viewBox="0 0 24 24">
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                </svg>
-                            ))}
-                            <svg className="w-5 h-5 text-stone-300 fill-current" viewBox="0 0 24 24">
-                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                            </svg>
-                        </div>
-                        <p className="text-stone-600 line-clamp-3 mb-4 text-sm leading-relaxed">
-                            라임과 자몽의 풍미가 감도는 향. 매우 상쾌한 산미와 긴 미네랄 피니시. 여름 오후에 완벽한 와인.
-                        </p>
-                        <div className="pt-4 border-t border-stone-100 flex items-center justify-between">
-                            <span className="text-sm text-stone-500 font-medium">Marlborough, NZ</span>
-                        </div>
+                    <span className="text-xs font-semibold text-stone-700">파트너</span>
+                    <span className="text-[10px] text-stone-400">예약픽업</span>
+                </Link>
+                <Link to="/bucket-list" className="flex flex-col items-center gap-2">
+                    <div className="w-14 h-14 rounded-2xl bg-indigo-500 flex items-center justify-center text-white shadow-lg shadow-indigo-100">
+                        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
                     </div>
-
-                    {/* Card 3 */}
-                    <div className="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all border border-stone-100 cursor-pointer">
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="bg-rose-50 text-rose-700 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">로제</div>
-                            <span className="text-stone-400 text-sm">1주 전</span>
-                        </div>
-                        <h3 className="text-xl font-serif font-bold text-stone-900 mb-2 group-hover:text-wine-700 transition-colors">Whispering Angel</h3>
-                        <div className="flex items-center gap-1 mb-4">
-                            {[1, 2, 3, 4].map((star) => (
-                                <svg key={star} className="w-5 h-5 text-gold-500 fill-current" viewBox="0 0 24 24">
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                </svg>
-                            ))}
-                            <svg className="w-5 h-5 text-gold-500 fill-current" viewBox="0 0 24 24">
-                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                            </svg>
-                        </div>
-                        <p className="text-stone-600 line-clamp-3 mb-4 text-sm leading-relaxed">
-                            연한 핑크빛. 딸기와 크림의 향에 말린 허브의 뉘앙스. 마시기 편하지만 구조감은 약간 부족함.
-                        </p>
-                        <div className="pt-4 border-t border-stone-100 flex items-center justify-between">
-                            <span className="text-sm text-stone-500 font-medium">Provence, France</span>
-                        </div>
+                    <span className="text-xs font-semibold text-stone-700">스토어</span>
+                    <span className="text-[10px] text-stone-400">오늘픽업</span>
+                </Link>
+                <Link to="/notes" className="flex flex-col items-center gap-2">
+                    <div className="w-14 h-14 rounded-2xl bg-violet-500 flex items-center justify-center text-white shadow-lg shadow-violet-100">
+                        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
                     </div>
+                    <span className="text-xs font-semibold text-stone-700">해외직구</span>
+                    <span className="text-[10px] text-stone-400">집으로 배송</span>
+                </Link>
+                <Link to="/statistics" className="flex flex-col items-center gap-2">
+                    <div className="w-14 h-14 rounded-2xl bg-stone-600 flex items-center justify-center text-white shadow-lg shadow-stone-200">
+                        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <span className="text-xs font-semibold text-stone-700">택배</span>
+                    <span className="text-[10px] text-stone-400">집으로 배송</span>
+                </Link>
+            </div>
+
+            {/* Brand/Category List */}
+            <div className="bg-white py-6 overflow-x-auto no-scrollbar border-b border-stone-100 mb-2">
+                <div className="flex px-4 gap-6 min-w-max">
+                    {['CU', '이마트24', '세븐일레븐', 'GS25', '와인앤모어', '보틀벙커', '신라면세점', '롯데면세점'].map((brand, i) => (
+                        <div key={i} className="flex flex-col items-center gap-2 cursor-pointer group">
+                            <div className="w-16 h-16 rounded-full bg-stone-50 border border-stone-200 flex items-center justify-center text-xs font-bold text-stone-400 group-hover:border-wine-200 group-hover:bg-wine-50 group-hover:text-wine-600 transition-colors">
+                                {brand[0]}
+                            </div>
+                            <span className="text-xs text-stone-600">{brand}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
-        </>
+
+            {/* Banner 2 */}
+            <div className="bg-blue-500 mx-4 rounded-xl p-4 flex items-center justify-between text-white shadow-lg shadow-blue-200 my-6">
+                <div>
+                    <h3 className="font-bold text-lg">원하는 카테고리를 선택해보세요!</h3>
+                    <p className="text-white/80 text-xs mt-1">취향에 맞는 와인을 찾아드립니다</p>
+                </div>
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                    <ChevronRight className="w-6 h-6" />
+                </div>
+            </div>
+
+            {/* Recommendation Section */}
+            <div className="bg-white py-8">
+                <div className="px-4 mb-4 flex items-center justify-between">
+                    <h3 className="text-xl font-bold text-stone-800">이달의 추천 와인</h3>
+                    <Link to="/cellar" className="text-sm text-stone-400 flex items-center">
+                        더보기 <ChevronRight className="w-4 h-4" />
+                    </Link>
+                </div>
+
+                <div className="flex overflow-x-auto gap-4 px-4 pb-4 no-scrollbar">
+                    {[1, 2, 3].map((item) => (
+                        <div key={item} className="min-w-[160px] md:min-w-[200px] bg-white border border-stone-100 rounded-xl overflow-hidden shadow-sm">
+                            <div className="aspect-[3/4] bg-stone-100 relative">
+                                {/* Placeholder for Wine Image */}
+                                <div className="absolute inset-0 flex items-center justify-center text-stone-300">
+                                    <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div className="p-3">
+                                <div className="text-xs text-wine-600 font-bold mb-1">BEST {item}</div>
+                                <h4 className="font-bold text-stone-800 text-sm truncate">Château Margaux 2015</h4>
+                                <div className="text-xs text-stone-500 mt-1">France</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
     )
 }

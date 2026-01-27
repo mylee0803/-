@@ -149,6 +149,7 @@ export default function AddEntry() {
                             <input
                                 type="file"
                                 accept="image/*"
+                                capture="environment"
                                 className="hidden"
                                 id="wine-label-upload"
                                 onChange={handleImageUpload}

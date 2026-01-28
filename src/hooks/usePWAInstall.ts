@@ -11,7 +11,7 @@ export function usePWAInstall() {
 
     useEffect(() => {
         const handler = (e: Event) => {
-            // Prevent the mini-infobar from appearing on mobile
+            console.log('[usePWAInstall] beforeinstallprompt captured');
             e.preventDefault();
             // Stash the event so it can be triggered later.
             setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -26,23 +26,32 @@ export function usePWAInstall() {
     }, []);
 
     const install = async () => {
-        if (!deferredPrompt) return;
-
-        // Show the install prompt
-        await deferredPrompt.prompt();
-
-        // Wait for the user to respond to the prompt
-        const { outcome } = await deferredPrompt.userChoice;
-
-        if (outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-        } else {
-            console.log('User dismissed the install prompt');
+        if (!deferredPrompt) {
+            console.warn('[usePWAInstall] install called but deferredPrompt is null');
+            return;
         }
 
-        // We've used the prompt, and can't use it again, throw it away
-        setDeferredPrompt(null);
-        setIsInstallable(false);
+        try {
+            console.log('[usePWAInstall] Triggering prompt');
+            // Show the install prompt
+            await deferredPrompt.prompt();
+
+            // Wait for the user to respond to the prompt
+            const choiceResult = await deferredPrompt.userChoice;
+            console.log('[usePWAInstall] User choice:', choiceResult.outcome);
+
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+        } catch (err) {
+            console.error('[usePWAInstall] Install prompt error:', err);
+        } finally {
+            // We've used the prompt, and can't use it again, throw it away
+            setDeferredPrompt(null);
+            setIsInstallable(false);
+        }
     };
 
     return { isInstallable, install };

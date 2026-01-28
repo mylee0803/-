@@ -4,7 +4,6 @@ import { fetchWines } from '../services/api';
 import type { Wine } from '../types/wine';
 import WineCard from '../components/WineCard';
 import Input from '../components/ui/Input';
-import Select from '../components/ui/Select';
 import Button from '../components/ui/Button';
 
 export default function MyCellar() {
@@ -40,9 +39,10 @@ export default function MyCellar() {
                 }));
 
                 setWines(safeData);
-            } catch (err) {
-                console.error(err);
-                setError('Failed to load wines from your cellar.');
+            } catch (err: any) {
+                console.error('[MyCellar] Load Error:', err);
+                // Show the actual error message to the user/developer for debugging
+                setError(err.message || '와인 데이터를 불러오는데 실패했습니다.');
             } finally {
                 setLoading(false);
             }
@@ -80,70 +80,76 @@ export default function MyCellar() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-                <div>
-                    <h1 className="text-3xl font-serif font-bold text-wine-950">내 와인 셀러</h1>
-                    <p className="text-stone-500 mt-2">나만의 와인 컬렉션을 관리하고 상세한 시음 노트를 확인하세요.</p>
-                </div>
-                <Link to="/add">
-                    <Button>와인 등록</Button>
-                </Link>
-            </div>
-
-            {/* Filters */}
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-stone-100 mb-8 flex flex-col md:flex-row gap-4 items-center">
-                <div className="w-full md:w-96">
-                    <Input
-                        label=""
-                        placeholder="와인 검색..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full"
-                    />
-                </div>
-                <div className="w-full md:w-48">
-                    <Select
-                        label=""
-                        options={[
-                            { value: 'All', label: '전체 종류' },
-                            { value: 'Red', label: '레드' },
-                            { value: 'White', label: '화이트' },
-                            { value: 'Rose', label: '로제' },
-                            { value: 'Sparkling', label: '스파클링' },
-                            { value: 'Dessert', label: '디저트' },
-                            { value: 'Fortified', label: '주정강화' },
-                        ]}
-                        value={selectedType}
-                        onChange={(e) => setSelectedType(e.target.value)}
-                    />
-                </div>
-                <div className="ml-auto text-sm text-stone-500">
-                    총 <span className="font-semibold text-wine-900">{filteredWines.length}</span>개의 와인
-                </div>
-            </div>
-
-            {/* Grid */}
-            {filteredWines.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredWines.map((wine) => (
-                        <WineCard key={wine.id || Math.random()} wine={wine} />
-                    ))}
-                </div>
-            ) : (
-                <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-stone-200">
-                    <div className="w-16 h-16 bg-stone-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg className="w-8 h-8 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
+        <div className="max-w-7xl mx-auto pb-12">
+            {/* Category Tabs - Sticky under header */}
+            <div className="sticky top-14 md:top-20 z-40 bg-white border-b border-stone-100 shadow-sm">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex overflow-x-auto scrollbar-hide -mb-px space-x-6">
+                        {['All', 'Red', 'White', 'Sparkling', 'Rose', 'Dessert', 'Fortified'].map((type) => (
+                            <button
+                                key={type}
+                                onClick={() => setSelectedType(type)}
+                                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors ${selectedType === type
+                                    ? 'border-wine-900 text-wine-900'
+                                    : 'border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300'
+                                    }`}
+                            >
+                                {type === 'All' ? '전체' :
+                                    type === 'Red' ? '레드' :
+                                        type === 'White' ? '화이트' :
+                                            type === 'Sparkling' ? '스파클링' :
+                                                type === 'Rose' ? '로제' :
+                                                    type === 'Dessert' ? '디저트' : '주정강화'}
+                            </button>
+                        ))}
                     </div>
-                    <h3 className="text-lg font-medium text-stone-900">등록된 와인이 없습니다</h3>
-                    <p className="text-stone-500 mt-1">검색어를 변경하거나 새로운 와인을 등록해보세요.</p>
-                    <Link to="/add" className="inline-block mt-4">
-                        <Button variant="outline" size="sm">와인 등록</Button>
-                    </Link>
                 </div>
-            )}
+            </div>
+
+            <div className="px-4 sm:px-6 lg:px-8 pt-6">
+                <div className="flex justify-between items-center mb-6">
+                    <div className="text-sm text-stone-500">
+                        총 <span className="font-semibold text-wine-900">{filteredWines.length}</span>개의 와인
+                    </div>
+                    <div className="flex gap-2">
+                        {/* Search Input - Compact */}
+                        <div className="relative">
+                            <Input
+                                label=""
+                                placeholder="검색..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-32 md:w-48 py-1.5 text-sm"
+                            />
+                        </div>
+                        <Link to="/add">
+                            <Button size="sm">와인 등록</Button>
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Grid */}
+                {filteredWines.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredWines.map((wine) => (
+                            <WineCard key={wine.id || Math.random()} wine={wine} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-stone-200">
+                        <div className="w-16 h-16 bg-stone-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg className="w-8 h-8 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </div>
+                        <h3 className="text-lg font-medium text-stone-900">등록된 와인이 없습니다</h3>
+                        <p className="text-stone-500 mt-1">검색어를 변경하거나 새로운 와인을 등록해보세요.</p>
+                        <Link to="/add" className="inline-block mt-4">
+                            <Button variant="outline" size="sm">와인 등록</Button>
+                        </Link>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

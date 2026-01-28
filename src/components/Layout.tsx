@@ -1,8 +1,10 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Home, BookOpen, Heart, MessageCircle, User, Bell, ShoppingCart, Search } from 'lucide-react';
+import { Home, BookOpen, Heart, MessageCircle, User, Bell, ShoppingCart, Search, Download } from 'lucide-react';
+import { usePWAInstall } from '../hooks/usePWAInstall';
 
 export default function Layout() {
     const location = useLocation();
+    const { isInstallable, install } = usePWAInstall();
 
     const isActive = (path: string) => {
         return location.pathname === path ? "text-wine-900" : "text-stone-400 hover:text-wine-700";
@@ -12,6 +14,17 @@ export default function Layout() {
         <div className="min-h-screen bg-stone-50 text-stone-800 font-sans pb-20 md:pb-0 selection:bg-wine-100 selection:text-wine-900">
             {/* Mobile Header (Page Specific) */}
             <header className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-stone-100 h-14 px-4 flex items-center justify-between md:hidden">
+                <div className="flex items-center">
+                    {isInstallable && (
+                        <button
+                            onClick={install}
+                            className="bg-[#EF1403] text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm active:scale-95 transition-transform"
+                        >
+                            <Download className="w-4 h-4" />
+                            <span className="text-xs font-bold leading-none">앱 설치</span>
+                        </button>
+                    )}
+                </div>
 
                 <div className="flex items-center gap-3">
                     <button className="p-1 text-stone-600 hover:text-wine-600">

@@ -10,7 +10,16 @@ interface BadgeProps {
 export default function Badge({ children, type, className = '' }: BadgeProps) {
     let colorStyles = "bg-stone-100 text-stone-700 ring-1 ring-stone-200";
 
-    switch (type) {
+    // Customize type string to match cases regardless of input casing
+    const normalizeType = (t?: string) => {
+        if (!t) return 'Unknown';
+        const lower = t.toLowerCase();
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+    };
+
+    const normalizedType = normalizeType(typeof type === 'string' ? type : 'Unknown');
+
+    switch (normalizedType) {
         case 'Red':
             colorStyles = "bg-red-50 text-red-900 ring-1 ring-red-100";
             break;

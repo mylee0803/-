@@ -18,9 +18,28 @@ export default function MyCellar() {
         const loadWines = async () => {
             try {
                 const data = await fetchWines();
-                // Map the data if necessary, ensuring it matches the Wine interface
-                // For now, we assume the API returns data in the correct format or compatible
-                setWines(data);
+                console.log('[MyCellar] Fetched data:', data);
+
+                if (!Array.isArray(data)) {
+                    console.error('[MyCellar] Data is not an array:', data);
+                    throw new Error('Received invalid data format from server');
+                }
+
+                // Ensure data matches Wine interface partially
+                const safeData: Wine[] = data.map((item: any) => ({
+                    ...item,
+                    id: item.id || Math.random().toString(36).substr(2, 9),
+                    rating: Number(item.rating) || 0,
+                    vintage: Number(item.vintage) || new Date().getFullYear(),
+                    // Basic fallbacks
+                    name: item.name || 'Unnamed Wine',
+                    type: item.type || 'Red',
+                    country: item.country || 'Unknown',
+                    region: item.region || 'Unknown',
+                    tastingDate: item.tastingDate || new Date().toISOString()
+                }));
+
+                setWines(safeData);
             } catch (err) {
                 console.error(err);
                 setError('Failed to load wines from your cellar.');

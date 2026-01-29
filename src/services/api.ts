@@ -72,7 +72,9 @@ export async function analyzeWineLabel(base64Image: string): Promise<Partial<Win
     });
 
     if (!response.ok) {
-        throw new Error(`Failed to analyze label: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error('[API] Analysis Failed:', errorText);
+        throw new Error(`Failed to analyze label (${response.status}): ${errorText || response.statusText}`);
     }
 
     return response.json();

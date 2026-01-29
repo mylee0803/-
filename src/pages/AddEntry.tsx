@@ -27,49 +27,84 @@ export default function AddEntry() {
         notes: ''
     });
 
+    // Helper to resize image before upload to avoid payload limits
+    const resizeImage = (file: File, maxWidth = 800): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target?.result as string;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx?.drawImage(img, 0, 0, width, height);
+
+                    // Compress to JPEG with 0.8 quality
+                    resolve(canvas.toDataURL('image/jpeg', 0.8));
+                };
+                img.onerror = (err) => reject(err);
+            };
+            reader.onerror = (err) => reject(err);
+        });
+    };
+
     const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         try {
             setIsAnalyzing(true);
-            const reader = new FileReader();
 
-            reader.onloadend = async () => {
-                try {
-                    const base64String = reader.result as string;
-                    // Send to n8n for analysis
-                    const result = await analyzeWineLabel(base64String);
+            // Resize image first
+            const resizedBase64 = await resizeImage(file);
 
-                    // Update form with result
-                    setFormData(prev => ({
-                        ...prev,
-                        name: result["와인명"] || prev.name,
-                        producer: result["생산자"] || prev.producer,
-                        vintage: (result["빈티지"] || prev.vintage).toString(),
-                        type: (result["종류"] as WineType) || prev.type,
-                        region: result["지역"] || prev.region,
-                        country: result["국가"] || prev.country,
-                        // Optional fields if provided by analysis:
-                        price: result["가격"] ? result["가격"].toString() : prev.price,
-                    }));
+            // Send to n8n for analysis
+            const result = await analyzeWineLabel(resizedBase64);
 
-                    alert('🎉 Label analyzed! Form updated.');
-                } catch (error) {
-                    console.error('Analysis failed:', error);
-                    alert('Failed to analyze wine label. Please try again.');
-                } finally {
-                    setIsAnalyzing(false);
-                    // Reset file input
-                    e.target.value = '';
-                }
-            };
+            console.log('[AddEntry] Analysis result:', result);
 
-            reader.readAsDataURL(file);
+            // Normalize result keys
+            const extractedName = result.name || result["와인명"] || '';
+            const extractedProducer = result.producer || result["생산자"] || '';
+
+            // Validation: If no name found, assume failure
+            if (!extractedName.trim()) {
+                alert('라벨을 인식하지 못했습니다. 다시 촬영해 주세요.');
+                return;
+            }
+
+            // Update form with result (handling both English and Korean keys)
+            setFormData(prev => ({
+                ...prev,
+                name: extractedName,
+                producer: extractedProducer,
+                vintage: (result.vintage || result["빈티지"] || prev.vintage).toString(),
+                type: (result.type || result["종류"] as WineType) || prev.type,
+                region: result.region || result["지역"] || prev.region,
+                country: result.country || result["국가"] || prev.country,
+                price: (result.price || result["가격"] || prev.price).toString(),
+            }));
+
+            // Optional: Notify success
+            // alert('분석이 완료되었습니다!');
 
         } catch (error) {
-            console.error('Error reading file:', error);
+            console.error('Analysis failed:', error);
+            alert('와인 라벨 분석 중 오류가 발생했습니다.');
+        } finally {
             setIsAnalyzing(false);
+            e.target.value = '';
         }
     };
 
@@ -173,8 +208,8 @@ export default function AddEntry() {
                                     ${(isAnalyzing || isSubmitting) ? 'opacity-50 cursor-not-allowed' : ''}
                                 `}
                             >
-                                <Camera className="w-5 h-5 text-wine-600" />
-                                <span>카메라</span>
+                                <Camera className={`w-5 h-5 text-wine-600 ${isAnalyzing ? 'animate-spin' : ''}`} />
+                                <span>{isAnalyzing ? '분석 중...' : '카메라'}</span>
                             </label>
 
                             {/* Gallery Button */}
@@ -193,8 +228,6 @@ export default function AddEntry() {
                                 </svg>
                                 <span>갤러리</span>
                             </label>
-
-                            {isAnalyzing && <span className="text-sm text-stone-500 animate-pulse">분석 중...</span>}
                         </div>
                     </div>
 

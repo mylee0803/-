@@ -59,16 +59,28 @@ export async function analyzeWineLabel(base64Image: string): Promise<Partial<Win
     const analysisUrl = getWebhookUrl(import.meta.env.VITE_N8N_ANALYSIS_WEBHOOK_URL, 'analyze-label');
     console.log('[API] Analyzing label with URL:', analysisUrl);
 
-    // Remove data:image/jpeg;base64, prefix if present
-    const base64Data = base64Image.replace(/^data:image\/[a-z]+;base64,/, "");
+    // Manual Base64 to Blob conversion for strict MIME type control
+    const byteString = atob(base64Image.split(',')[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    const imageBlob = new Blob([ab], { type: 'image/jpeg' });
+
+    // Prepare FormData with 'data' field (standard for n8n binary)
+    const formData = new FormData();
+    formData.append('data', imageBlob, 'image.jpg');
 
     const response = await fetch(analysisUrl, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'multipart/form-data' is set automatically with boundary
             'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning page
         },
-        body: JSON.stringify({ image: base64Data }),
+        body: formData,
     });
 
     if (!response.ok) {

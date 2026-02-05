@@ -114,13 +114,27 @@ export default function AddEntry() {
                 return val.toString().replace(/[^0-9.]/g, '') || old;
             };
 
+            // Helper to normalize wine type (Map AI output to App's internal values)
+            const normalizeType = (val: string): WineType => {
+                if (!val) return 'Red'; // Default
+                const lower = val.toLowerCase();
+                if (lower.includes('rose') || lower.includes('rosé')) return 'Rose';
+                if (lower.includes('sparkling') || lower.includes('champagne')) return 'Sparkling';
+                if (lower.includes('white')) return 'White';
+                if (lower.includes('dessert') || lower.includes('port') || lower.includes('sherry')) return 'Dessert';
+                if (lower.includes('fortified')) return 'Fortified';
+                return 'Red'; // Fallback
+            };
+
+            const rawType = result.type || result["종류"] || '';
+
             // Update form with result (handling both English and Korean keys)
             setFormData(prev => ({
                 ...prev,
                 name: extractedName,
                 producer: extractedProducer,
                 vintage: safeVintage(result.vintage || result["빈티지"], prev.vintage),
-                type: (result.type || result["종류"] as WineType) || prev.type,
+                type: rawType ? normalizeType(rawType) : prev.type,
                 region: result.region || result["지역"] || prev.region,
                 country: result.country || result["국가"] || prev.country,
                 price: safePrice(result.price || result["가격"], prev.price),

@@ -70,16 +70,8 @@ export async function analyzeWineLabel(base64Image: string): Promise<Partial<Win
     const analysisUrl = getWebhookUrl(import.meta.env.VITE_N8N_ANALYSIS_WEBHOOK_URL, 'analyze-label');
     console.log('[API] Analyzing label with URL:', analysisUrl);
 
-    // Manual Base64 to Blob conversion for strict MIME type control
-    const byteString = atob(base64Image.split(',')[1]);
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-
-    for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    const imageBlob = new Blob([ab], { type: 'image/jpeg' });
+    // Use modern fetch API to convert Base64 to Blob (Correctly handles MIME types and binary data)
+    const imageBlob = await (await fetch(base64Image)).blob();
 
     // Data Preparation Logging
     console.log(`[API] Image Blob Size: ${imageBlob.size} bytes`);
@@ -115,6 +107,11 @@ export async function analyzeWineLabel(base64Image: string): Promise<Partial<Win
             const rawText = await response.text();
             console.log('[API] Raw Response from N8N:', rawText);
 
+            if (!rawText.trim()) {
+                console.error('[API] Received empty response from N8N');
+                throw new Error('서버로부터 빈 응답이 왔습니다. (N8N 워크플로우를 확인해주세요)');
+            }
+
             if (!response.ok) {
                 const errorMessage = `Failed to analyze label (${response.status}): ${response.statusText}\nRaw Response: ${rawText}`;
                 console.error(`[API] ${errorMessage}`);
@@ -125,7 +122,7 @@ export async function analyzeWineLabel(base64Image: string): Promise<Partial<Win
                 return JSON.parse(rawText);
             } catch (jsonError) {
                 console.error('[API] Failed to parse JSON response:', jsonError);
-                throw new Error(`Invalid JSON response: ${rawText}`);
+                throw new Error(`Invalid JSON response: ${rawText.substring(0, 100)}...`);
             }
 
         } catch (error: any) {
@@ -135,8 +132,11 @@ export async function analyzeWineLabel(base64Image: string): Promise<Partial<Win
             // Should not retry if it's a 4xx error (client error) unless it's 408 (Request Timeout) or 429 (Too Many Requests)
             // But for simplicity/safety against N8N flakiness, we retry network errors or 5xx.
             // If AbortError (Time out), definitely retry.
+            // If "Empty response", do NOT retry (it's likely a logic error in N8N)
             const isTimeout = error.name === 'AbortError' || error.message.includes('aborted');
-            if (attempt < MAX_RETRIES && (isTimeout || !error.message.includes('4'))) {
+            const isEmptyResponse = error.message.includes('빈 응답');
+
+            if (attempt < MAX_RETRIES && !isEmptyResponse && (isTimeout || !error.message.includes('4'))) {
                 // Wait a bit before retry (e.g., 1s)
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 continue;

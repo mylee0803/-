@@ -28,8 +28,9 @@ export default function AddEntry() {
     });
 
     // Helper to resize image before upload to avoid payload limits
-    const resizeImage = (file: File, maxWidth = 800): Promise<string> => {
+    const resizeImage = (file: File, maxWidth = 1024): Promise<string> => {
         return new Promise((resolve, reject) => {
+            console.log(`[AddEntry] Processing image: ${file.name} (type: ${file.type}, size: ${file.size} bytes)`);
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = (event) => {
@@ -50,12 +51,25 @@ export default function AddEntry() {
                     const ctx = canvas.getContext('2d');
                     ctx?.drawImage(img, 0, 0, width, height);
 
-                    // Compress to JPEG with 0.8 quality
-                    resolve(canvas.toDataURL('image/jpeg', 0.8));
+                    // Compress to JPEG with 0.7 quality (Balance for 1024px < 1MB)
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+                    // Log final payload details
+                    const head = 'data:image/jpeg;base64,';
+                    const sizeInBytes = Math.round((dataUrl.length - head.length) * 3 / 4);
+                    console.log(`[AddEntry] Resized payload: 1024px max, image/jpeg, ~${sizeInBytes} bytes`);
+
+                    resolve(dataUrl);
                 };
-                img.onerror = (err) => reject(err);
+                img.onerror = (err) => {
+                    console.error('[AddEntry] Failed to load image (Format issue?):', err);
+                    reject(new Error('이미지를 불러오는데 실패했습니다. (HEIC 형식이면 JPEG로 변환이 필요할 수 있습니다.)'));
+                };
             };
-            reader.onerror = (err) => reject(err);
+            reader.onerror = (err) => {
+                console.error('[AddEntry] FileReader failed:', err);
+                reject(err);
+            };
         });
     };
 
@@ -74,34 +88,51 @@ export default function AddEntry() {
 
             console.log('[AddEntry] Analysis result:', result);
 
+            // DEBUG: Show raw response for user inspection
+            alert('Debug: n8n Response\n' + JSON.stringify(result, null, 2));
+
             // Normalize result keys
             const extractedName = result.name || result["와인명"] || '';
             const extractedProducer = result.producer || result["생산자"] || '';
 
-            // Validation: If no name found, assume failure
+            // Validation: If no name found, assume failure (Empty Scenario Handling)
             if (!extractedName.trim()) {
-                alert('라벨을 인식하지 못했습니다. 다시 촬영해 주세요.');
+                alert('라벨을 인식하지 못했습니다. 다시 촬영해 주세요. (이름 정보 누락)');
                 return;
             }
+
+            // Helper to sanitize vintage (extract 4-digit year)
+            const safeVintage = (val: any, old: string) => {
+                if (!val) return old;
+                const match = val.toString().match(/\d{4}/);
+                return match ? match[0] : old;
+            };
+
+            // Helper to sanitize price (remove currency symbols)
+            const safePrice = (val: any, old: string) => {
+                if (!val) return old;
+                return val.toString().replace(/[^0-9.]/g, '') || old;
+            };
 
             // Update form with result (handling both English and Korean keys)
             setFormData(prev => ({
                 ...prev,
                 name: extractedName,
                 producer: extractedProducer,
-                vintage: (result.vintage || result["빈티지"] || prev.vintage).toString(),
+                vintage: safeVintage(result.vintage || result["빈티지"], prev.vintage),
                 type: (result.type || result["종류"] as WineType) || prev.type,
                 region: result.region || result["지역"] || prev.region,
                 country: result.country || result["국가"] || prev.country,
-                price: (result.price || result["가격"] || prev.price).toString(),
+                price: safePrice(result.price || result["가격"], prev.price),
             }));
 
             // Optional: Notify success
             // alert('분석이 완료되었습니다!');
 
-        } catch (error) {
-            console.error('Analysis failed:', error);
-            alert('와인 라벨 분석 중 오류가 발생했습니다.');
+        } catch (error: any) {
+            console.error('[AddEntry] Analysis failed:', error);
+            // Show detailed error message from api.ts (which includes status code and raw response info)
+            alert(`와인 라벨 분석 중 오류가 발생했습니다.\n\n${error.message}`);
         } finally {
             setIsAnalyzing(false);
             e.target.value = '';
@@ -192,7 +223,7 @@ export default function AddEntry() {
                             />
                             <input
                                 type="file"
-                                accept="image/*"
+                                accept="image/png, image/jpeg"
                                 className="hidden"
                                 id="gallery-upload"
                                 onChange={handleImageUpload}

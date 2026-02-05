@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Temporary Scripts & Uploads
+scripts/test-real-image.ts
+scripts/test-upload.ts

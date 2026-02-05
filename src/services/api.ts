@@ -34,7 +34,7 @@ export async function submitWineEntry(data: WineSubmission): Promise<void> {
     });
 
     if (!response.ok) {
-        throw new Error(`Failed to submit entry: ${response.statusText}`);
+        throw new Error(`Failed to submit entry: ${response.status} ${response.statusText}`);
     }
 }
 
@@ -42,17 +42,28 @@ export async function fetchWines(): Promise<any[]> {
     const listUrl = getWebhookUrl(import.meta.env.VITE_N8N_LIST_URL, 'get-wines');
     console.log('[API] Fetching wines from:', listUrl);
 
-    const response = await fetch(listUrl, {
-        headers: {
-            'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning page
-        },
-    });
+    try {
+        const response = await fetch(listUrl, {
+            headers: {
+                'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning page
+            },
+        });
 
-    if (!response.ok) {
-        throw new Error(`Failed to fetch wines: ${response.statusText}`);
+        if (!response.ok) {
+            throw new Error(`서버 응답 오류 (${response.status}): ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error: any) {
+        console.error('[API] fetchWines Error:', error);
+
+        // 네트워크 오류 (Failed to fetch) 메시지 개선
+        if (error.message === 'Failed to fetch') {
+            throw new Error('서버에 연결할 수 없습니다. 인터넷 설정이나 API URL 설정을 확인해주세요.');
+        }
+
+        throw error;
     }
-
-    return response.json();
 }
 
 export async function analyzeWineLabel(base64Image: string): Promise<Partial<WineSubmission>> {
@@ -70,24 +81,68 @@ export async function analyzeWineLabel(base64Image: string): Promise<Partial<Win
 
     const imageBlob = new Blob([ab], { type: 'image/jpeg' });
 
-    // Prepare FormData with 'data' field (standard for n8n binary)
+    // Data Preparation Logging
+    console.log(`[API] Image Blob Size: ${imageBlob.size} bytes`);
+    console.log(`[API] Image Blob Type: ${imageBlob.type}`);
+
+    // Prepare FormData
     const formData = new FormData();
     formData.append('data', imageBlob, 'image.jpg');
 
-    const response = await fetch(analysisUrl, {
-        method: 'POST',
-        headers: {
-            // 'Content-Type': 'multipart/form-data' is set automatically with boundary
-            'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning page
-        },
-        body: formData,
-    });
+    const MAX_RETRIES = 1;
+    let lastError: any;
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        console.error('[API] Analysis Failed:', errorText);
-        throw new Error(`Failed to analyze label (${response.status}): ${errorText || response.statusText}`);
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+        try {
+            if (attempt > 0) {
+                console.log(`[API] Retrying analysis (Attempt ${attempt + 1}/${MAX_RETRIES + 1})...`);
+            }
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s Timeout
+
+            const response = await fetch(analysisUrl, {
+                method: 'POST',
+                headers: {
+                    'ngrok-skip-browser-warning': 'true',
+                },
+                body: formData,
+                signal: controller.signal,
+            });
+            clearTimeout(timeoutId);
+
+            // Always log the raw response text first for debugging
+            const rawText = await response.text();
+            console.log('[API] Raw Response from N8N:', rawText);
+
+            if (!response.ok) {
+                const errorMessage = `Failed to analyze label (${response.status}): ${response.statusText}\nRaw Response: ${rawText}`;
+                console.error(`[API] ${errorMessage}`);
+                throw new Error(errorMessage);
+            }
+
+            try {
+                return JSON.parse(rawText);
+            } catch (jsonError) {
+                console.error('[API] Failed to parse JSON response:', jsonError);
+                throw new Error(`Invalid JSON response: ${rawText}`);
+            }
+
+        } catch (error: any) {
+            console.error(`[API] Analysis Attempt ${attempt + 1} Failed:`, error);
+            lastError = error;
+
+            // Should not retry if it's a 4xx error (client error) unless it's 408 (Request Timeout) or 429 (Too Many Requests)
+            // But for simplicity/safety against N8N flakiness, we retry network errors or 5xx.
+            // If AbortError (Time out), definitely retry.
+            const isTimeout = error.name === 'AbortError' || error.message.includes('aborted');
+            if (attempt < MAX_RETRIES && (isTimeout || !error.message.includes('4'))) {
+                // Wait a bit before retry (e.g., 1s)
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                continue;
+            }
+        }
     }
 
-    return response.json();
+    throw lastError || new Error('Analysis failed after retries');
 }

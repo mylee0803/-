@@ -8,9 +8,12 @@ import Button from '../components/ui/Button';
 import { submitWineEntry, analyzeWineLabel, type WineSubmission } from '../services/api';
 import type { WineType } from '../types/wine';
 
+import SuccessModal from '../components/ui/SuccessModal';
+
 export default function AddEntry() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     // We keep some fields as strings for easier input handling, then convert on submit
     const [formData, setFormData] = useState({
@@ -141,9 +144,6 @@ export default function AddEntry() {
                 price: safePrice(result.price || result["가격"], prev.price),
             }));
 
-            // Optional: Notify success
-            // alert('분석이 완료되었습니다!');
-
         } catch (error: any) {
             console.error('[AddEntry] Analysis failed:', error);
             // Show detailed error message from api.ts (which includes status code and raw response info)
@@ -152,6 +152,25 @@ export default function AddEntry() {
             setIsAnalyzing(false);
             e.target.value = '';
         }
+    };
+
+    const handleSuccessClose = () => {
+        setShowSuccessModal(false);
+        // Reset form after modal is closed
+        setFormData({
+            name: '',
+            producer: '',
+            vintage: new Date().getFullYear().toString(),
+            type: 'Red',
+            region: '',
+            country: '',
+            rating: 0,
+            price: '',
+            purchasedAt: '',
+            tastingDate: new Date().toISOString().split('T')[0],
+            notes: ''
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleSubmit = async (e: FormEvent) => {
@@ -182,22 +201,9 @@ export default function AddEntry() {
             await submitWineEntry(submissionData);
 
             console.log('Data sent successfully!');
-            alert('🍷 Entry added successfully to your Wine Diary!');
+            // Show success modal instead of alert
+            setShowSuccessModal(true);
 
-            // Reset form
-            setFormData({
-                name: '',
-                producer: '',
-                vintage: new Date().getFullYear().toString(),
-                type: 'Red',
-                region: '',
-                country: '',
-                rating: 0,
-                price: '',
-                purchasedAt: '',
-                tastingDate: new Date().toISOString().split('T')[0],
-                notes: ''
-            });
         } catch (error) {
             console.error('Submission error:', error);
             alert('Failed to save entry. Please ensure the webhook URL is correct.');
@@ -398,6 +404,11 @@ export default function AddEntry() {
                     </Button>
                 </div>
             </form>
+
+            <SuccessModal
+                isOpen={showSuccessModal}
+                onClose={handleSuccessClose}
+            />
         </div>
     )
 }

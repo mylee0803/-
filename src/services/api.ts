@@ -1,7 +1,23 @@
 // import type { Wine } from '../types/wine';
 
-// Accepting Record<string, any> to allow localized keys (e.g., "와인명")
-export interface WineSubmission extends Record<string, any> { }
+import type { WineType } from '../types/wine';
+
+export interface WineSubmission {
+    name: string;
+    name_kr?: string;
+    producer?: string;
+    vintage?: number;
+    type: WineType;
+    region?: string;
+    country?: string;
+    abv?: number | null;
+    price?: number;
+    rating: number;
+    tastingDate: string;
+    notes?: string;
+    purchasedAt?: string;
+    [key: string]: any; // Allow extra fields if needed
+}
 
 // Helper to construct the full webhook URL
 // If the env var contains "/webhook/", use it as is (legacy/local support)

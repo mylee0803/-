@@ -93,30 +93,28 @@ export default function AddEntry() {
 
             console.log('[AddEntry] Analysis result:', result);
 
-            // Normalize result keys
-            const extractedName = result.name || result["와인명"] || '';
-            const extractedNameKr = result.name_kr || result["한글와인명"] || '';
+            // Extract values directly using English keys (as requested by user)
+            const extractedName = result.name || '';
+            const extractedNameKr = result.name_kr || '';
+            const extractedProducer = result.producer || '';
+            const extractedRegion = result.region || '';
+            const extractedCountry = result.country || '';
+            const extractedAbv = result.abv || '';
 
-            // Prioritize English keys as requested, fallback to Korean keys if present
-            const extractedProducer = result.producer || result["생산자"] || '';
-            const extractedRegion = result.region || result["지역"] || '';
-            const extractedCountry = result.country || result["국가"] || '';
-            const extractedAbv = result.abv || result["도수"] || '';
-
-            // Validation: If no name found, assume failure (Empty Scenario Handling)
+            // Validation: If no name found, assume failure
             if (!extractedName.trim()) {
                 alert('라벨을 인식하지 못했습니다. 다시 촬영해 주세요. (이름 정보 누락)');
                 return;
             }
 
-            // Helper to sanitize vintage (extract 4-digit year)
+            // Helper to sanitize vintage
             const safeVintage = (val: any, old: string) => {
                 if (!val) return old;
                 const match = val.toString().match(/\d{4}/);
                 return match ? match[0] : old;
             };
 
-            // Helper to sanitize price (remove currency symbols)
+            // Helper to sanitize price
             const safePrice = (val: any, old: string) => {
                 if (!val) return old;
                 return val.toString().replace(/[^0-9.]/g, '') || old;
@@ -130,37 +128,37 @@ export default function AddEntry() {
                 return match ? match[0] : old;
             };
 
-            // Helper to normalize wine type (Map AI output to App's internal values)
+            // Helper to normalize wine type
             const normalizeType = (val: string): WineType => {
-                if (!val) return 'Red'; // Default
+                if (!val) return 'Red';
                 const lower = val.toLowerCase();
                 if (lower.includes('rose') || lower.includes('rosé')) return 'Rose';
                 if (lower.includes('sparkling') || lower.includes('champagne')) return 'Sparkling';
                 if (lower.includes('white')) return 'White';
                 if (lower.includes('dessert') || lower.includes('port') || lower.includes('sherry')) return 'Dessert';
                 if (lower.includes('fortified')) return 'Fortified';
-                return 'Red'; // Fallback
+                return 'Red';
             };
 
-            const rawType = result.type || result["종류"] || '';
+            const rawType = result.type || '';
 
-            // Update form with result (handling both English and Korean keys)
+            // Update form with result
             setFormData(prev => ({
                 ...prev,
                 name: extractedName,
-                name_kr: extractedNameKr, // New field
+                name_kr: extractedNameKr,
                 producer: extractedProducer,
-                vintage: safeVintage(result.vintage || result["빈티지"], prev.vintage),
+                vintage: safeVintage(result.vintage, prev.vintage),
                 type: rawType ? normalizeType(rawType) : prev.type,
                 region: extractedRegion || prev.region,
                 country: extractedCountry || prev.country,
-                abv: safeAbv(extractedAbv, prev.abv), // New field
-                price: safePrice(result.price || result["가격"], prev.price),
+                abv: safeAbv(extractedAbv, prev.abv),
+                price: safePrice(result.price, prev.price),
             }));
 
         } catch (error: any) {
             console.error('[AddEntry] Analysis failed:', error);
-            // Show detailed error message from api.ts (which includes status code and raw response info)
+            // Show detailed error message from api.ts
             alert(`와인 라벨 분석 중 오류가 발생했습니다.\n\n${error.message}`);
         } finally {
             setIsAnalyzing(false);
@@ -198,20 +196,21 @@ export default function AddEntry() {
         try {
             setIsSubmitting(true);
 
-            // Prepare data for submission (convert types and translate keys to Korean)
+            // Prepare data for submission using English keys
             const submissionData: WineSubmission = {
-                "와인명": formData.name,
-                "와인명(한글)": formData.name_kr, // New field
-                "생산자": formData.producer,
-                "빈티지": parseInt(formData.vintage) || new Date().getFullYear(),
-                "종류": formData.type,
-                "지역": formData.region,
-                "국가": formData.country,
-                "도수": formData.abv ? parseFloat(formData.abv) : null, // New field (float or null)
-                "평점": formData.rating,
-                "가격": parseFloat(formData.price) || 0,
-                "시음일": formData.tastingDate,
-                "노트": formData.notes
+                name: formData.name,
+                name_kr: formData.name_kr,
+                producer: formData.producer,
+                vintage: parseInt(formData.vintage) || new Date().getFullYear(),
+                type: formData.type,
+                region: formData.region,
+                country: formData.country,
+                abv: formData.abv ? parseFloat(formData.abv) : null,
+                rating: formData.rating,
+                price: parseFloat(formData.price) || 0,
+                tastingDate: formData.tastingDate,
+                notes: formData.notes,
+                purchasedAt: formData.purchasedAt
             };
 
             console.log('Sending data...', submissionData);

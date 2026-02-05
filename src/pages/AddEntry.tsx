@@ -88,12 +88,13 @@ export default function AddEntry() {
 
             console.log('[AddEntry] Analysis result:', result);
 
-            // DEBUG: Show raw response for user inspection
-            alert('Debug: n8n Response\n' + JSON.stringify(result, null, 2));
-
             // Normalize result keys
             const extractedName = result.name || result["와인명"] || '';
+
+            // Prioritize English keys as requested, fallback to Korean keys if present
             const extractedProducer = result.producer || result["생산자"] || '';
+            const extractedRegion = result.region || result["지역"] || '';
+            const extractedCountry = result.country || result["국가"] || '';
 
             // Validation: If no name found, assume failure (Empty Scenario Handling)
             if (!extractedName.trim()) {
@@ -135,8 +136,8 @@ export default function AddEntry() {
                 producer: extractedProducer,
                 vintage: safeVintage(result.vintage || result["빈티지"], prev.vintage),
                 type: rawType ? normalizeType(rawType) : prev.type,
-                region: result.region || result["지역"] || prev.region,
-                country: result.country || result["국가"] || prev.country,
+                region: extractedRegion || prev.region,
+                country: extractedCountry || prev.country,
                 price: safePrice(result.price || result["가격"], prev.price),
             }));
 

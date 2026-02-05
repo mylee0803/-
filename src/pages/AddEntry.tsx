@@ -18,11 +18,13 @@ export default function AddEntry() {
     // We keep some fields as strings for easier input handling, then convert on submit
     const [formData, setFormData] = useState({
         name: '',
+        name_kr: '',
         producer: '',
         vintage: new Date().getFullYear().toString(),
         type: 'Red' as WineType,
         region: '',
         country: '',
+        abv: '',
         rating: 0,
         price: '',
         purchasedAt: '',
@@ -93,11 +95,13 @@ export default function AddEntry() {
 
             // Normalize result keys
             const extractedName = result.name || result["와인명"] || '';
+            const extractedNameKr = result.name_kr || result["한글와인명"] || '';
 
             // Prioritize English keys as requested, fallback to Korean keys if present
             const extractedProducer = result.producer || result["생산자"] || '';
             const extractedRegion = result.region || result["지역"] || '';
             const extractedCountry = result.country || result["국가"] || '';
+            const extractedAbv = result.abv || result["도수"] || '';
 
             // Validation: If no name found, assume failure (Empty Scenario Handling)
             if (!extractedName.trim()) {
@@ -118,6 +122,14 @@ export default function AddEntry() {
                 return val.toString().replace(/[^0-9.]/g, '') || old;
             };
 
+            // Helper to sanitize ABV
+            const safeAbv = (val: any, old: string) => {
+                if (!val) return old;
+                // Extract number, allow decimal
+                const match = val.toString().match(/[0-9.]+/);
+                return match ? match[0] : old;
+            };
+
             // Helper to normalize wine type (Map AI output to App's internal values)
             const normalizeType = (val: string): WineType => {
                 if (!val) return 'Red'; // Default
@@ -136,11 +148,13 @@ export default function AddEntry() {
             setFormData(prev => ({
                 ...prev,
                 name: extractedName,
+                name_kr: extractedNameKr, // New field
                 producer: extractedProducer,
                 vintage: safeVintage(result.vintage || result["빈티지"], prev.vintage),
                 type: rawType ? normalizeType(rawType) : prev.type,
                 region: extractedRegion || prev.region,
                 country: extractedCountry || prev.country,
+                abv: safeAbv(extractedAbv, prev.abv), // New field
                 price: safePrice(result.price || result["가격"], prev.price),
             }));
 
@@ -159,11 +173,13 @@ export default function AddEntry() {
         // Reset form after modal is closed
         setFormData({
             name: '',
+            name_kr: '',
             producer: '',
             vintage: new Date().getFullYear().toString(),
             type: 'Red',
             region: '',
             country: '',
+            abv: '',
             rating: 0,
             price: '',
             purchasedAt: '',
@@ -185,11 +201,13 @@ export default function AddEntry() {
             // Prepare data for submission (convert types and translate keys to Korean)
             const submissionData: WineSubmission = {
                 "와인명": formData.name,
+                "와인명(한글)": formData.name_kr, // New field
                 "생산자": formData.producer,
                 "빈티지": parseInt(formData.vintage) || new Date().getFullYear(),
                 "종류": formData.type,
                 "지역": formData.region,
                 "국가": formData.country,
+                "도수": formData.abv ? parseFloat(formData.abv) : null, // New field (float or null)
                 "평점": formData.rating,
                 "가격": parseFloat(formData.price) || 0,
                 "시음일": formData.tastingDate,
@@ -295,6 +313,16 @@ export default function AddEntry() {
                     />
 
                     <Input
+                        label="와인명 (한글)"
+                        name="name_kr"
+                        placeholder="예: 샤토 마고"
+                        value={formData.name_kr}
+                        onChange={handleChange}
+                        className="md:col-span-2"
+                        disabled={isSubmitting}
+                    />
+
+                    <Input
                         label="생산자"
                         name="producer"
                         placeholder="예: Château Margaux"
@@ -343,6 +371,17 @@ export default function AddEntry() {
                         name="country"
                         placeholder="예: France"
                         value={formData.country}
+                        onChange={handleChange}
+                        disabled={isSubmitting}
+                    />
+
+                    <Input
+                        label="도수 (%)"
+                        name="abv"
+                        type="number"
+                        step="0.1"
+                        placeholder="예: 13.5"
+                        value={formData.abv}
                         onChange={handleChange}
                         disabled={isSubmitting}
                     />

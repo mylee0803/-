@@ -13,7 +13,7 @@ export default function Layout() {
     return (
         <div className="min-h-screen bg-stone-50 text-stone-800 font-sans pb-20 md:pb-0 selection:bg-wine-100 selection:text-wine-900">
             {/* Mobile Header (Page Specific) */}
-            <header className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-stone-100 h-14 px-4 flex items-center justify-between md:hidden">
+            <header className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md h-14 px-4 flex items-center justify-between md:hidden border-none shadow-none">
                 <div className="flex items-center">
                     {isInstallable && (
                         <button

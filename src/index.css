@@ -1,39 +1,41 @@
 @import "tailwindcss";
 
 @theme {
-  /* Wine Red Palette (Main: #EF1403 at 500) */
-  --color-wine-50: #FFF1F0;
-  --color-wine-100: #FFDFDD;
-  --color-wine-200: #FFC0BC;
-  --color-wine-300: #FF948E;
-  --color-wine-400: #FF5C54;
-  --color-wine-500: #EF1403;
-  --color-wine-600: #C60B00;
-  --color-wine-700: #960800;
-  --color-wine-800: #750A05;
-  --color-wine-900: #630E0A;
-  --color-wine-950: #3B0503;
+    /* Wine Red Palette (Main: #EF1403 at 500) */
+    --color-wine-50: #FFF1F0;
+    --color-wine-100: #FFDFDD;
+    --color-wine-200: #FFC0BC;
+    --color-wine-300: #FF948E;
+    --color-wine-400: #FF5C54;
+    --color-wine-500: #EF1403;
+    --color-wine-600: #C60B00;
+    --color-wine-700: #960800;
+    --color-wine-800: #750A05;
+    --color-wine-900: #630E0A;
+    --color-wine-950: #3B0503;
 
-  --color-gold-400: #fbbf24;
-  --color-gold-500: #f59e0b;
-  --color-gold-600: #d97706;
+    --color-gold-400: #fbbf24;
+    --color-gold-500: #f59e0b;
+    --color-gold-600: #d97706;
 
-  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-  --font-serif: "Noto Serif KR", "Playfair Display", serif;
+    --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    --font-serif: "Noto Serif KR", "Playfair Display", serif;
 }
 
 @layer base {
-  body {
-    font-family: var(--font-sans);
-    @apply antialiased text-stone-800 bg-stone-50;
-  }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--font-serif);
-  }
+    html,
+    body {
+        font-family: var(--font-sans);
+        @apply antialiased text-stone-800 bg-stone-50;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-serif);
+    }
 }

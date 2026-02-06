@@ -171,7 +171,7 @@ export default function MyCellar() {
             {/* Floating Action Button (Centered above bottom nav) */}
             <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50">
                 <Link to="/add">
-                    <button className="bg-wine-900 hover:bg-wine-800 text-white shadow-lg flex items-center justify-center gap-2 transition-all duration-300 active:scale-95 h-10 px-6 rounded-full whitespace-nowrap">
+                    <button className="bg-[#EF1403] hover:bg-[#c60b00] text-white shadow-lg flex items-center justify-center gap-2 transition-all duration-300 active:scale-95 h-10 px-6 rounded-full whitespace-nowrap">
                         <span className="text-sm font-bold">와인 등록</span>
                     </button>
                 </Link>

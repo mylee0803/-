@@ -13,7 +13,10 @@ export default function Layout() {
     return (
         <div className="min-h-screen bg-stone-50 text-stone-800 font-sans pb-20 md:pb-0 selection:bg-wine-100 selection:text-wine-900">
             {/* Mobile Header (Page Specific) */}
-            <header className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md h-14 px-4 flex items-center justify-between md:hidden border-none shadow-none ring-0 outline-none">
+            <header
+                style={{ borderColor: 'transparent', boxShadow: 'none' }}
+                className="fixed top-0 w-full z-50 bg-white h-14 px-4 flex items-center justify-between md:hidden border-none shadow-none ring-0 outline-none"
+            >
                 <div className="flex items-center">
                     {isInstallable && (
                         <button
@@ -41,7 +44,10 @@ export default function Layout() {
             </header>
 
             {/* Desktop Navigation (Classic) */}
-            <nav className="hidden md:block fixed w-full z-50 bg-white/80 backdrop-blur-md border-none shadow-none ring-0 outline-none">
+            <nav
+                style={{ borderColor: 'transparent', boxShadow: 'none' }}
+                className="hidden md:block fixed w-full z-50 bg-white border-none shadow-none ring-0 outline-none"
+            >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-20">
 

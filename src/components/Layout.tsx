@@ -15,7 +15,7 @@ export default function Layout() {
             {/* Mobile Header (Page Specific) */}
             <header
                 style={{ borderColor: 'transparent', boxShadow: 'none' }}
-                className="fixed top-0 w-full z-50 bg-white h-14 px-4 flex items-center justify-between md:hidden border-none shadow-none ring-0 outline-none"
+                className="fixed top-0 w-full z-[100] bg-white h-14 px-4 flex items-center justify-between md:hidden border-none shadow-none ring-0 outline-none"
             >
                 <div className="flex items-center">
                     {isInstallable && (
@@ -46,7 +46,7 @@ export default function Layout() {
             {/* Desktop Navigation (Classic) */}
             <nav
                 style={{ borderColor: 'transparent', boxShadow: 'none' }}
-                className="hidden md:block fixed w-full z-50 bg-white border-none shadow-none ring-0 outline-none"
+                className="hidden md:block fixed w-full z-[100] bg-white border-none shadow-none ring-0 outline-none"
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-20">

@@ -93,9 +93,9 @@ export default function MyCellar() {
     return (
         <div className="max-w-7xl mx-auto pb-24 relative min-h-screen">
             {/* Category Tabs - Sticky under header */}
-            <div className="sticky top-14 md:top-20 z-40 bg-white">
+            <div className="sticky top-14 md:top-20 z-40 bg-white border-none shadow-none">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex overflow-x-auto scrollbar-hide -mb-px space-x-6">
+                    <div className="flex overflow-x-auto scrollbar-hide space-x-6">
                         {['All', 'Red', 'White', 'Sparkling', 'Rose', 'Dessert', 'Fortified'].map((type) => (
                             <button
                                 key={type}

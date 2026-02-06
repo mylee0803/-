@@ -1,24 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  --color-wine-50: #fdf4f4;
-  --color-wine-100: #fbe8e8;
-  --color-wine-200: #f6d5d5;
-  --color-wine-300: #efafaf;
-  --color-wine-400: #e57e7e;
-  --color-wine-500: #d95353;
-  --color-wine-600: #c33535;
-  --color-wine-700: #a32626;
-  --color-wine-800: #872323;
-  --color-wine-900: #702222;
-  --color-wine-950: #3d0e0e;
+  /* Wine Red Palette (Main: #EF1403 at 500) */
+  --color-wine-50: #FFF1F0;
+  --color-wine-100: #FFDFDD;
+  --color-wine-200: #FFC0BC;
+  --color-wine-300: #FF948E;
+  --color-wine-400: #FF5C54;
+  --color-wine-500: #EF1403;
+  --color-wine-600: #C60B00;
+  --color-wine-700: #960800;
+  --color-wine-800: #750A05;
+  --color-wine-900: #630E0A;
+  --color-wine-950: #3B0503;
 
   --color-gold-400: #fbbf24;
   --color-gold-500: #f59e0b;
   --color-gold-600: #d97706;
 
-  --font-sans: "Inter", sans-serif;
-  --font-serif: "Playfair Display", serif;
+  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-serif: "Noto Serif KR", "Playfair Display", serif;
 }
 
 @layer base {

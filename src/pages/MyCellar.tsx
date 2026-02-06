@@ -10,6 +10,7 @@ export default function MyCellar() {
     const [wines, setWines] = useState<Wine[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedType, setSelectedType] = useState('All');
 
@@ -90,9 +91,9 @@ export default function MyCellar() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto pb-12">
+        <div className="max-w-7xl mx-auto pb-24 relative min-h-screen">
             {/* Category Tabs - Sticky under header */}
-            <div className="sticky top-14 md:top-20 z-40 bg-white border-b border-stone-100 shadow-sm">
+            <div className="sticky top-14 md:top-20 z-40 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex overflow-x-auto scrollbar-hide -mb-px space-x-6">
                         {['All', 'Red', 'White', 'Sparkling', 'Rose', 'Dessert', 'Fortified'].map((type) => (
@@ -119,28 +120,37 @@ export default function MyCellar() {
             <div className="px-4 sm:px-6 lg:px-8 pt-6">
                 <div className="flex justify-between items-center mb-6">
                     <div className="text-sm text-stone-500">
-                        총 <span className="font-semibold text-wine-900">{filteredWines.length}</span>개의 와인
+                        총 <span className="font-semibold text-wine-900">{filteredWines.length}개</span>
                     </div>
-                    <div className="flex gap-2">
-                        {/* Search Input - Compact */}
-                        <div className="relative">
-                            <Input
-                                label=""
-                                placeholder="검색..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-32 md:w-48 py-1.5 text-sm"
-                            />
-                        </div>
-                        <Link to="/add">
-                            <Button size="sm">와인 등록</Button>
-                        </Link>
-                    </div>
+
+                    {/* Search Icon Toggle */}
+                    <button
+                        onClick={() => setIsSearchOpen(!isSearchOpen)}
+                        className="p-2 text-stone-400 hover:text-wine-900 transition-colors"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
                 </div>
 
-                {/* Grid */}
+                {/* Collapsible Search Bar */}
+                {isSearchOpen && (
+                    <div className="mb-6 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <Input
+                            label=""
+                            autoFocus
+                            placeholder="와인명, 생산자 검색..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full"
+                        />
+                    </div>
+                )}
+
+                {/* List */}
                 {filteredWines.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {filteredWines.map((wine) => (
                             <WineCard key={wine.id || Math.random()} wine={wine} />
                         ))}
@@ -153,12 +163,18 @@ export default function MyCellar() {
                             </svg>
                         </div>
                         <h3 className="text-lg font-medium text-stone-900">등록된 와인이 없습니다</h3>
-                        <p className="text-stone-500 mt-1">검색어를 변경하거나 새로운 와인을 등록해보세요.</p>
-                        <Link to="/add" className="inline-block mt-4">
-                            <Button variant="outline" size="sm">와인 등록</Button>
-                        </Link>
+                        <p className="text-stone-500 mt-1">새로운 와인을 등록해보세요.</p>
                     </div>
                 )}
+            </div>
+
+            {/* Floating Action Button (Centered above bottom nav) */}
+            <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50">
+                <Link to="/add">
+                    <button className="bg-wine-900 hover:bg-wine-800 text-white shadow-lg flex items-center justify-center gap-2 transition-all duration-300 active:scale-95 h-10 px-6 rounded-full whitespace-nowrap">
+                        <span className="text-sm font-bold">와인 등록</span>
+                    </button>
+                </Link>
             </div>
         </div>
     );

@@ -38,10 +38,10 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
     return (
         <div
             onClick={() => onClick && onClick(wine)}
-            className={`group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border cursor-pointer flex flex-col h-full bg-white`}
+            className={`group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border cursor-pointer flex flex-row h-36 bg-white`}
         >
-            {/* Image Section */}
-            <div className="relative h-52 overflow-hidden bg-stone-100">
+            {/* Image Section (Left, Square) */}
+            <div className="relative w-36 h-full flex-shrink-0 bg-stone-100 overflow-hidden">
                 {wine.imageUrl ? (
                     <img
                         src={wine.imageUrl}
@@ -50,92 +50,86 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                     />
                 ) : (
                     <div className={`w-full h-full flex items-center justify-center ${cardStyles}`}>
-                        <Droplets className="w-12 h-12 opacity-20" />
+                        <Droplets className="w-8 h-8 opacity-20" />
                     </div>
                 )}
 
-                {/* Type Badge (Top Left) */}
-                <div className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-bold backdrop-blur-md shadow-sm ${labelStyles}`}>
+                {/* Type Badge (Top Left, Small) */}
+                <div className={`absolute top-2 left-2 px-1.5 py-0.5 rounded-full text-[10px] font-bold backdrop-blur-md shadow-sm ${labelStyles}`}>
                     {wine.type === 'Red' ? 'RED' :
-                        wine.type === 'White' ? 'WHITE' :
-                            wine.type === 'Rose' ? 'ROSE' :
-                                wine.type === 'Sparkling' ? 'SPARKLING' :
-                                    wine.type === 'Dessert' ? 'DESSERT' : 'FORTIFIED'}
+                        wine.type === 'White' ? 'WHT' :
+                            wine.type === 'Rose' ? 'ROS' :
+                                wine.type === 'Sparkling' ? 'SPK' :
+                                    wine.type === 'Dessert' ? 'DST' : 'PRT'}
                 </div>
-
-                {/* Rating (Top Right) */}
-                {wine.rating > 0 && (
-                    <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg shadow-sm flex items-center gap-1">
-                        <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
-                        <span className="text-xs font-bold text-stone-800">{wine.rating}</span>
-                    </div>
-                )}
             </div>
 
-            {/* Content Section */}
-            <div className="p-5 flex flex-col flex-grow relative">
-                {/* Vintage & ABV Tag */}
-                <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-semibold text-stone-400 tracking-wider">
-                        {wine.vintage > 0 ? wine.vintage : 'NV'}
-                    </span>
-                    {wine.abv && (
-                        <span className="text-xs font-medium text-stone-400 bg-stone-50 px-1.5 py-0.5 rounded border border-stone-100">
-                            {wine.abv}%
-                        </span>
-                    )}
-                </div>
+            {/* Content Section (Right) */}
+            <div className="flex-grow p-4 flex flex-col justify-between relative overflow-hidden">
+                {/* Rating (Absolute Top Right) */}
+                {wine.rating > 0 && (
+                    <div className="absolute top-3 right-3 flex items-center gap-1">
+                        <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                        <span className="text-xs font-bold text-stone-600">{wine.rating}</span>
+                    </div>
+                )}
 
-                {/* Titles */}
-                <div className="mb-4">
+                <div>
                     {/* Primary Title (Korean preferred) */}
-                    <h3 className="text-lg font-serif font-bold text-stone-900 leading-tight mb-1 group-hover:text-wine-800 transition-colors line-clamp-1">
+                    <h3 className="text-lg font-serif font-bold text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors line-clamp-1 pr-8">
                         {wine.name_kr || wine.name}
                     </h3>
 
-                    {/* Secondary Title (English Name) */}
-                    {wine.name_kr && (
-                        <p className="text-xs text-stone-500 font-medium line-clamp-1 mb-1">
-                            {wine.name}
-                        </p>
-                    )}
-
-                    {/* Producer */}
-                    <p className="text-xs text-stone-400 line-clamp-1">
-                        {wine.producer}
+                    {/* Secondary Title (English Name) - Below Korean */}
+                    <p className="text-xs text-stone-400 font-medium line-clamp-1 mb-2 pr-4">
+                        {wine.name_kr ? wine.name : wine.producer}
                     </p>
-                </div>
 
-                {/* Metadata Footer */}
-                <div className="mt-auto pt-4 border-t border-stone-50 flex flex-col gap-1.5">
-                    {/* Region */}
-                    <div className="flex items-center gap-1.5 text-stone-500">
-                        <MapPin className="w-3.5 h-3.5 text-stone-400" />
-                        <span className="text-xs truncate max-w-[180px]">
-                            {wine.country} · {wine.region}
+                    {/* Metadata Row */}
+                    <div className="flex items-center gap-2 text-xs text-stone-500 mb-1">
+                        <span className="font-semibold text-wine-900/80">
+                            {wine.vintage > 0 ? wine.vintage : 'NV'}
                         </span>
-                    </div>
-
-                    {/* Date & Price Row */}
-                    <div className="flex items-center justify-between mt-1">
-                        <div className="flex items-center gap-1.5 text-stone-500">
-                            <Calendar className="w-3.5 h-3.5 text-stone-400" />
-                            <span className="text-xs">
-                                {new Date(wine.tastingDate).toLocaleDateString()}
-                            </span>
-                        </div>
-
-                        {wine.price && (
-                            <span className="text-sm font-bold text-wine-900/80">
-                                ₩{wine.price.toLocaleString()}
-                            </span>
+                        <span className="w-0.5 h-2.5 bg-stone-300"></span>
+                        <span className="truncate max-w-[100px]">
+                            {wine.country}
+                        </span>
+                        {wine.abv && (
+                            <>
+                                <span className="w-0.5 h-2.5 bg-stone-300"></span>
+                                <span className="text-stone-400">{wine.abv}%</span>
+                            </>
                         )}
                     </div>
                 </div>
+
+                {/* Footer Icon Row */}
+                <div className="flex items-center justify-between mt-1 pt-2 border-t border-stone-100">
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1 text-stone-400">
+                            <MapPin className="w-3 h-3" />
+                            <span className="text-[10px] truncate max-w-[80px]">
+                                {wine.region}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-1 text-stone-400">
+                            <Calendar className="w-3 h-3" />
+                            <span className="text-[10px]">
+                                {new Date(wine.tastingDate).toLocaleDateString().slice(2)}
+                            </span>
+                        </div>
+                    </div>
+
+                    {wine.price && (
+                        <span className="text-xs font-bold text-stone-900">
+                            ₩{(wine.price / 10000).toFixed(0)}만
+                        </span>
+                    )}
+                </div>
             </div>
 
-            {/* Hover Color Line at Bottom */}
-            <div className={`h-1 w-full ${cardStyles.split(' ')[0].replace('bg-', 'bg-').replace('50', '200')}`} />
+            {/* Hover Color Line at Left Border (optional accent) */}
+            <div className={`absolute left-0 top-0 bottom-0 w-1 ${cardStyles.split(' ')[0].replace('bg-', 'bg-').replace('50', '400')} opacity-0 group-hover:opacity-100 transition-opacity`} />
         </div>
     );
 }

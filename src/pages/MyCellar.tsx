@@ -100,9 +100,9 @@ export default function MyCellar() {
                             <button
                                 key={type}
                                 onClick={() => setSelectedType(type)}
-                                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors ${selectedType === type
-                                    ? 'border-wine-900 text-wine-900'
-                                    : 'border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300'
+                                className={`whitespace-nowrap py-4 px-1 font-medium text-sm transition-all focus:outline-none ${selectedType === type
+                                    ? 'text-wine-900 shadow-[0_2px_0_0_#630E0A]'
+                                    : 'text-stone-500 hover:text-stone-700'
                                     }`}
                             >
                                 {type === 'All' ? '전체' :

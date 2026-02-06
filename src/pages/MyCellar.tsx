@@ -91,7 +91,7 @@ export default function MyCellar() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto pb-24 relative min-h-screen">
+        <div className="max-w-7xl mx-auto pb-24 relative min-h-screen bg-white">
             {/* Category Tabs - Sticky under header */}
             <div className="sticky top-14 md:top-20 z-40 !bg-white !border-0 !border-b-0 !border-none !ring-0 !shadow-none !outline-none">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -117,7 +117,7 @@ export default function MyCellar() {
                 </div>
             </div>
 
-            <div className="px-4 sm:px-6 lg:px-8 pt-6">
+            <div className="px-4 sm:px-6 lg:px-8 pt-6 -mt-px bg-white relative z-0">
                 <div className="flex justify-between items-center mb-6">
                     <div className="text-sm text-stone-500">
                         총 <span className="font-semibold text-wine-900">{filteredWines.length}개</span>

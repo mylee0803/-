@@ -21,7 +21,7 @@ export default function Layout() {
                     {isInstallable && (
                         <button
                             onClick={install}
-                            className="bg-[#EF1403] text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm active:scale-95 transition-transform"
+                            className="bg-[#EF1403] text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-none active:scale-95 transition-transform"
                         >
                             <Download className="w-4 h-4" />
                             <span className="text-xs font-bold leading-none">앱 설치</span>
@@ -60,7 +60,7 @@ export default function Layout() {
                         </div>
                         <div>
                             <Link to="/add">
-                                <button className="bg-wine-600 text-white px-6 py-2.5 rounded-full hover:bg-wine-700 transition-all shadow-sm hover:shadow-md active:scale-95 font-medium">
+                                <button className="bg-wine-600 text-white px-6 py-2.5 rounded-full hover:bg-wine-700 transition-all shadow-none hover:shadow-md active:scale-95 font-medium">
                                     와인 등록
                                 </button>
                             </Link>

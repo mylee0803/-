@@ -27,7 +27,7 @@
     html,
     body {
         font-family: var(--font-sans);
-        @apply antialiased text-stone-800 bg-stone-50;
+        @apply antialiased text-stone-800 bg-white;
     }
 
     h1,

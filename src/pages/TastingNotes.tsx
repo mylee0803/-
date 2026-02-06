@@ -25,7 +25,7 @@ export default function TastingNotes() {
                 </p>
             </div>
 
-            <div className="mb-10 sticky top-24 z-30 bg-stone-50/95 backdrop-blur-sm py-4 border-b border-stone-200">
+            <div className="mb-10 sticky top-24 z-30 bg-stone-50/95 backdrop-blur-sm py-4 border-none shadow-none">
                 <div className="max-w-xl mx-auto">
                     <Input
                         label=""

@@ -15,7 +15,7 @@ export default function Layout() {
             {/* Mobile Header (Page Specific) */}
             <header
                 style={{ borderColor: 'transparent', boxShadow: 'none' }}
-                className="fixed top-0 w-full z-[100] bg-white h-14 px-4 flex items-center justify-between md:hidden border-none shadow-none ring-0 outline-none"
+                className="fixed top-0 w-full z-[100] bg-white h-12 px-4 flex items-center justify-between md:hidden border-none shadow-none ring-0 outline-none"
             >
                 <div className="flex items-center">
                     {isInstallable && (

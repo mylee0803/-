@@ -93,7 +93,10 @@ export default function MyCellar() {
     return (
         <div className="max-w-7xl mx-auto pb-24 relative min-h-screen bg-white overflow-hidden">
             {/* Category Tabs - Sticky under header */}
-            <div className="sticky top-12 md:top-20 z-40 !bg-white !border-0 !border-b-0 !border-none !ring-0 !shadow-none !outline-none">
+            <div
+                style={{ borderColor: 'transparent' }}
+                className="sticky top-10 md:top-20 z-40 !bg-white !border-0 !border-b-0 !border-none !ring-0 !shadow-none !outline-none"
+            >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex overflow-x-auto scrollbar-hide space-x-6">
                         {['All', 'Red', 'White', 'Sparkling', 'Rose', 'Dessert', 'Fortified'].map((type) => (
@@ -116,10 +119,10 @@ export default function MyCellar() {
                     </div>
                 </div>
                 {/* Physical Cover-up (White Band) */}
-                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white z-[60]" />
+                <div className="absolute -bottom-1 left-0 right-0 w-full h-[4px] bg-white z-[60]" />
             </div>
 
-            <div className="px-4 sm:px-6 lg:px-8 pt-14 bg-white relative z-30">
+            <div className="px-4 sm:px-6 lg:px-8 pt-24 bg-white relative z-30">
                 <div className="flex justify-between items-center mb-6">
                     <div className="text-sm text-stone-500">
                         총 <span className="font-semibold text-wine-900">{filteredWines.length}개</span>

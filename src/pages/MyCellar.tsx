@@ -95,7 +95,7 @@ export default function MyCellar() {
             {/* Category Tabs - Sticky under header */}
             <div
                 style={{ borderColor: 'transparent' }}
-                className="sticky top-[39px] md:top-20 z-40 !bg-white !border-0 !border-b-0 !border-none !ring-0 !shadow-none !outline-none"
+                className="sticky top-10 md:top-20 z-40 !bg-white !border-0 !border-b-0 !border-none !ring-0 !shadow-none !outline-none -mt-5"
             >
                 {/* Physical Masking (Top) */}
                 <div className="absolute top-0 left-0 right-0 w-full h-[2px] bg-white z-[60]" />

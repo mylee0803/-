@@ -11,7 +11,7 @@ export default function Layout() {
     };
 
     return (
-        <div className="min-h-screen bg-stone-50 text-stone-800 font-sans pb-20 md:pb-0 selection:bg-wine-100 selection:text-wine-900">
+        <div className="min-h-screen bg-white text-stone-800 font-sans pb-20 md:pb-0 selection:bg-wine-100 selection:text-wine-900">
             {/* Mobile Header (Page Specific) */}
             <header
                 style={{ borderColor: 'transparent', boxShadow: 'none' }}
@@ -70,7 +70,7 @@ export default function Layout() {
             </nav>
 
             {/* Main Content */}
-            <div className="pt-14 md:pt-20">
+            <div className="pt-10 md:pt-20">
                 <Outlet />
             </div>
 

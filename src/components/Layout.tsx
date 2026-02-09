@@ -14,7 +14,6 @@ export default function Layout() {
         <div className="min-h-screen bg-white text-stone-800 font-sans pb-20 md:pb-0 selection:bg-wine-100 selection:text-wine-900">
             {/* Mobile Header (Page Specific) */}
             <header
-                style={{ borderColor: 'transparent', boxShadow: 'none' }}
                 className="fixed top-0 w-full z-[100] bg-white h-[40px] px-4 flex items-center justify-between md:hidden border-none shadow-none ring-0 outline-none"
             >
                 <div className="flex items-center">
@@ -45,7 +44,6 @@ export default function Layout() {
 
             {/* Desktop Navigation (Classic) */}
             <nav
-                style={{ borderColor: 'transparent', boxShadow: 'none' }}
                 className="hidden md:block fixed w-full z-[100] bg-white border-none shadow-none ring-0 outline-none"
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

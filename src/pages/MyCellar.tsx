@@ -126,7 +126,7 @@ export default function MyCellar() {
             {/* Sticky Content Header (Count & Search) */}
             <div className="sticky top-[80px] md:top-[120px] z-30 bg-white px-4 sm:px-6 lg:px-8 pt-[10px]">
                 <div className="flex justify-between items-center mb-0 gap-4">
-                    <div className="text-sm ml-[10px] mb-[3px] text-[#AFABAB] whitespace-nowrap">
+                    <div className="text-sm ml-[10px] mb-[3px] text-[#404040] whitespace-nowrap">
                         총 <span className="font-semibold text-wine-900">{filteredWines.length}</span><span className="font-normal">개</span>
                     </div>
 
@@ -148,7 +148,7 @@ export default function MyCellar() {
                         {/* Search Icon Toggle */}
                         <button
                             onClick={() => setIsSearchOpen(!isSearchOpen)}
-                            className="p-2 text-[#AFABAB] hover:text-wine-900 transition-colors mb-[2.5px]"
+                            className="p-2 text-[#404040] hover:text-wine-900 transition-colors mb-[2.5px]"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

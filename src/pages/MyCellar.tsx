@@ -101,7 +101,7 @@ export default function MyCellar() {
                             <button
                                 key={type}
                                 onClick={() => setSelectedType(type)}
-                                className={`whitespace-nowrap relative z-10 py-2 px-1 font-medium text-sm transition-all focus:outline-none ${selectedType === type
+                                className={`whitespace-nowrap relative z-10 py-2 px-1 font-medium text-base transition-all focus:outline-none ${selectedType === type
                                     ? 'text-wine-900 shadow-[0_2px_0_0_#630E0A]'
                                     : 'text-stone-500 hover:text-stone-700'
                                     }`}

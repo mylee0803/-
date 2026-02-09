@@ -70,7 +70,7 @@ export default function Layout() {
             </nav>
 
             {/* Main Content */}
-            <div className="pt-10 md:pt-20">
+            <div className="pt-[40px] md:pt-20">
                 <Outlet />
             </div>
 

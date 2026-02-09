@@ -93,14 +93,14 @@ export default function MyCellar() {
     return (
         <div className="max-w-7xl mx-auto pb-24 relative min-h-screen bg-white overflow-hidden">
             {/* Category Tabs - Sticky under header */}
-            <div className="sticky top-[30px] md:top-[90px] z-40 bg-white h-[30px] flex items-center shadow-none border-none">
+            <div className="sticky top-[40px] md:top-[90px] z-40 bg-white h-[40px] flex items-center shadow-none border-none">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div className="flex overflow-x-auto scrollbar-hide space-x-6">
                         {['All', 'Red', 'White', 'Sparkling', 'Rose', 'Dessert', 'Fortified'].map((type) => (
                             <button
                                 key={type}
                                 onClick={() => setSelectedType(type)}
-                                className={`whitespace-nowrap py-1 px-1 font-medium text-sm transition-all focus:outline-none ${selectedType === type
+                                className={`whitespace-nowrap py-2 px-1 font-medium text-sm transition-all focus:outline-none ${selectedType === type
                                     ? 'text-wine-900 shadow-[0_2px_0_0_#630E0A]'
                                     : 'text-stone-500 hover:text-stone-700'
                                     }`}
@@ -117,7 +117,7 @@ export default function MyCellar() {
                 </div>
             </div>
 
-            <div className="px-4 sm:px-6 lg:px-8 pt-[40px] bg-white relative z-30">
+            <div className="px-4 sm:px-6 lg:px-8 pt-[50px] bg-white relative z-30">
                 <div className="flex justify-between items-center mb-5">
                     <div className="text-sm text-stone-500">
                         총 <span className="font-semibold text-wine-900">{filteredWines.length}개</span>

@@ -140,7 +140,7 @@ export default function MyCellar() {
                                     placeholder="와인명/생산자"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-[50vw] md:w-[200px] border-[0.7px] text-sm py-1"
+                                    className="w-[35vw] md:w-[140px] border-[0.35px] text-sm py-1"
                                 />
                             </div>
                         )}
@@ -148,7 +148,7 @@ export default function MyCellar() {
                         {/* Search Icon Toggle */}
                         <button
                             onClick={() => setIsSearchOpen(!isSearchOpen)}
-                            className="p-2 text-stone-400 hover:text-wine-900 transition-colors"
+                            className="p-2 text-stone-400 hover:text-wine-900 transition-colors mb-[1.5px]"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

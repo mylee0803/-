@@ -118,7 +118,7 @@ export default function MyCellar() {
                 </div>
             </div>
 
-            <div className="px-4 sm:px-6 lg:px-8 pt-[50px] bg-white relative z-30">
+            <div className="px-4 sm:px-6 lg:px-8 pt-[20px] bg-white relative z-30">
                 <div className="flex justify-between items-center mb-5">
                     <div className="text-sm text-stone-500">
                         총 <span className="font-semibold text-wine-900">{filteredWines.length}개</span>

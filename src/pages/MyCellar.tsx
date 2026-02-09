@@ -123,36 +123,39 @@ export default function MyCellar() {
             </div>
 
             {/* Sticky Content Header (Count & Search) */}
+            {/* Sticky Content Header (Count & Search) */}
             <div className="sticky top-[80px] md:top-[120px] z-30 bg-white px-4 sm:px-6 lg:px-8 pt-[10px]">
-                <div className="flex justify-between items-end mb-0">
+                <div className="flex justify-between items-center mb-0">
                     <div className="text-sm text-stone-500 ml-[10px] mb-[3px]">
                         총 <span className="font-semibold text-wine-900">{filteredWines.length}개</span>
                     </div>
 
-                    {/* Search Icon Toggle */}
-                    <button
-                        onClick={() => setIsSearchOpen(!isSearchOpen)}
-                        className="p-2 text-stone-400 hover:text-wine-900 transition-colors"
-                    >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </button>
-                </div>
+                    <div className="flex items-center gap-2">
+                        {/* Inline Search Bar */}
+                        {isSearchOpen && (
+                            <div className="animate-in fade-in slide-in-from-right-2 duration-200">
+                                <Input
+                                    label=""
+                                    autoFocus
+                                    placeholder="와인명/생산자"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-[50vw] md:w-[200px] border-[0.7px] text-sm py-1"
+                                />
+                            </div>
+                        )}
 
-                {/* Collapsible Search Bar */}
-                {isSearchOpen && (
-                    <div className="mb-6 animate-in fade-in slide-in-from-top-2 duration-200">
-                        <Input
-                            label=""
-                            autoFocus
-                            placeholder="와인명, 생산자 검색..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full"
-                        />
+                        {/* Search Icon Toggle */}
+                        <button
+                            onClick={() => setIsSearchOpen(!isSearchOpen)}
+                            className="p-2 text-stone-400 hover:text-wine-900 transition-colors"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </button>
                     </div>
-                )}
+                </div>
             </div>
 
             {/* Scrollable Wine List */}

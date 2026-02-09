@@ -95,7 +95,7 @@ export default function MyCellar() {
             {/* Category Tabs - Sticky under header */}
             <div
                 style={{ borderColor: 'transparent' }}
-                className="sticky top-10 md:top-20 z-40 !bg-white !border-0 !border-b-0 !border-none !ring-0 !shadow-none !outline-none -mt-5"
+                className="sticky top-[70px] md:top-[90px] z-[9999] min-h-[50px] !bg-red-500 !border-0 !border-b-0 !border-none !ring-0 !shadow-none !outline-none"
             >
                 {/* Physical Masking (Top) */}
                 <div className="absolute top-0 left-0 right-0 w-full h-[2px] bg-white z-[60]" />
@@ -125,7 +125,7 @@ export default function MyCellar() {
                 <div className="absolute -bottom-1 left-0 right-0 w-full h-[4px] bg-white z-[60]" />
             </div>
 
-            <div className="px-4 sm:px-6 lg:px-8 pt-4 -mt-[1px] bg-white relative z-30">
+            <div className="px-4 sm:px-6 lg:px-8 pt-4 bg-white relative z-30">
                 <div className="flex justify-between items-center mb-5">
                     <div className="text-sm text-stone-500">
                         총 <span className="font-semibold text-wine-900">{filteredWines.length}개</span>

@@ -140,7 +140,7 @@ export default function MyCellar() {
                                     placeholder="와인명/생산자"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full h-[32px] border border-[#FFA7A7] text-xs py-0 px-2 focus:ring-0 focus:border-[#FFA7A7] rounded-md placeholder:text-stone-300 shadow-sm"
+                                    className="w-full h-[32px] border-[1px] border-stone-200 text-xs py-0 px-2 focus:ring-0 focus:border-stone-200 focus-visible:ring-0 outline-none rounded-md placeholder:text-stone-300 shadow-sm"
                                 />
                             </div>
                         )}

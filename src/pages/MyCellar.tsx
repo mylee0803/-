@@ -124,8 +124,8 @@ export default function MyCellar() {
 
             {/* Sticky Content Header (Count & Search) */}
             <div className="sticky top-[80px] md:top-[120px] z-30 bg-white px-4 sm:px-6 lg:px-8 pt-[10px]">
-                <div className="flex justify-between items-center mb-[10px]">
-                    <div className="text-sm text-stone-500">
+                <div className="flex justify-between items-center mb-0">
+                    <div className="text-sm text-stone-500 ml-[10px]">
                         총 <span className="font-semibold text-wine-900">{filteredWines.length}개</span>
                     </div>
 

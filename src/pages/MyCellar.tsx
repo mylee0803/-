@@ -93,7 +93,7 @@ export default function MyCellar() {
     return (
         <div className="max-w-7xl mx-auto pb-24 relative min-h-screen bg-white overflow-hidden">
             {/* Category Tabs - Sticky under header */}
-            {/* Category Tabs - Sticky under header */}
+            {/* Category Tabs - Sticky under header (Fixed 40px) */}
             <div className="sticky top-[40px] h-[40px] flex items-center bg-white z-40">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div className="flex overflow-x-auto scrollbar-hide space-x-6">

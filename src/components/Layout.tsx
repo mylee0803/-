@@ -12,7 +12,7 @@ export default function Layout() {
 
     return (
         <div className="min-h-screen bg-white text-stone-800 font-sans pb-20 md:pb-0 selection:bg-wine-100 selection:text-wine-900">
-            {/* Mobile Header (Page Specific) */}
+            {/* Mobile Header (Page Specific - Fixed 40px) */}
             <header
                 className="fixed top-0 w-full z-[100] bg-white h-[40px] px-4 flex items-center justify-between md:hidden border-none shadow-none ring-0 outline-none"
             >

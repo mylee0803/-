@@ -94,14 +94,18 @@ export default function MyCellar() {
         <div className="max-w-7xl mx-auto pb-24 relative min-h-screen bg-white">
             {/* Category Tabs - Sticky under header */}
             {/* Category Tabs - Sticky under header (Fixed 40px/80px) */}
+            {/* Category Tabs - Sticky under header (Fixed 40px/80px) */}
             <div className="sticky top-[40px] md:top-[80px] h-[40px] flex items-center bg-white z-40">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div className="flex overflow-x-auto scrollbar-hide space-x-6">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full">
+                    <div
+                        className="flex overflow-x-auto space-x-6 h-full items-center [&::-webkit-scrollbar]:hidden"
+                        style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+                    >
                         {['All', 'Red', 'White', 'Sparkling', 'Rose', 'Dessert', 'Fortified'].map((type) => (
                             <button
                                 key={type}
                                 onClick={() => setSelectedType(type)}
-                                className={`whitespace-nowrap relative z-10 py-2 px-1 font-medium text-base transition-all focus:outline-none ${selectedType === type
+                                className={`whitespace-nowrap relative z-10 py-2 px-1 font-medium text-base transition-all focus:outline-none h-[40px] flex items-center ${selectedType === type
                                     ? 'text-wine-900 shadow-[0_2px_0_0_#630E0A]'
                                     : 'text-stone-500 hover:text-stone-700'
                                     }`}

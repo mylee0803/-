@@ -133,14 +133,14 @@ export default function MyCellar() {
                     <div className="flex items-center">
                         {/* Inline Search Bar */}
                         {isSearchOpen && (
-                            <div className="animate-in fade-in slide-in-from-right-2 duration-200 w-[180px] mr-2 ml-auto">
+                            <div className="animate-in fade-in slide-in-from-right-2 duration-200 w-[180px] mr-2 ml-auto flex items-center">
                                 <Input
                                     label=""
                                     autoFocus
                                     placeholder="와인명/생산자"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full border-[1px] border-stone-200 text-sm py-1 shadow-sm"
+                                    className="w-full h-[30px] border border-stone-200 text-xs py-0 px-2 focus:ring-0 focus:border-stone-300 rounded-md placeholder:text-stone-300 shadow-sm"
                                 />
                             </div>
                         )}

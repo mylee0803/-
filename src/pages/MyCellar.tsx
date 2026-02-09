@@ -125,22 +125,22 @@ export default function MyCellar() {
             {/* Sticky Content Header (Count & Search) */}
             {/* Sticky Content Header (Count & Search) */}
             <div className="sticky top-[80px] md:top-[120px] z-30 bg-white px-4 sm:px-6 lg:px-8 pt-[10px]">
-                <div className="flex justify-between items-center mb-0">
-                    <div className="text-sm ml-[10px] mb-[3px] text-[#AFABAB]">
+                <div className="flex justify-between items-center mb-0 gap-4">
+                    <div className="text-sm ml-[10px] mb-[3px] text-[#AFABAB] whitespace-nowrap">
                         총 <span className="font-semibold text-wine-900">{filteredWines.length}</span><span className="font-normal">개</span>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center">
                         {/* Inline Search Bar */}
                         {isSearchOpen && (
-                            <div className="animate-in fade-in slide-in-from-right-2 duration-200">
+                            <div className="animate-in fade-in slide-in-from-right-2 duration-200 w-[180px] mr-2 ml-auto">
                                 <Input
                                     label=""
                                     autoFocus
                                     placeholder="와인명/생산자"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-[20vw] md:w-[140px] border-[0.1px] text-sm py-1"
+                                    className="w-full border-[1px] border-stone-200 text-sm py-1 shadow-sm"
                                 />
                             </div>
                         )}

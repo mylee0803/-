@@ -133,7 +133,7 @@ export default function MyCellar() {
                     <div className="flex items-center">
                         {/* Inline Search Bar */}
                         {isSearchOpen && (
-                            <div className="animate-in fade-in slide-in-from-right-2 duration-200 w-[216px] mr-2 ml-auto flex items-center mb-[6px]">
+                            <div className="animate-in fade-in slide-in-from-right-2 duration-200 w-[216px] mr-2 ml-auto flex items-center mb-[8px]">
                                 <Input
                                     label=""
                                     autoFocus

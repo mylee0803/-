@@ -155,38 +155,40 @@ export default function MyCellar() {
                             </svg>
                         </button>
                     </div>
+
+                    {/* Separator Line */}
+                    <div className="h-px bg-stone-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] mb-4 -mx-4 sm:-mx-6 lg:-mx-8"></div>
+                </div>
+
+                {/* Scrollable Wine List */}
+                <div className="px-4 sm:px-6 lg:px-8 bg-white">
+                    {filteredWines.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {filteredWines.map((wine) => (
+                                <WineCard key={wine.id || Math.random()} wine={wine} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-stone-200">
+                            <div className="w-16 h-16 bg-stone-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg className="w-8 h-8 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                            </div>
+                            <h3 className="text-lg font-medium text-stone-900">등록된 와인이 없습니다</h3>
+                            <p className="text-stone-500 mt-1">새로운 와인을 등록해보세요.</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Floating Action Button (Centered above bottom nav) */}
+                <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50">
+                    <Link to="/add">
+                        <button className="bg-[#EF1403] hover:bg-[#c60b00] text-white shadow-lg flex items-center justify-center gap-2 transition-all duration-300 active:scale-95 h-10 px-6 rounded-full whitespace-nowrap">
+                            <span className="text-sm font-bold">와인 등록</span>
+                        </button>
+                    </Link>
                 </div>
             </div>
-
-            {/* Scrollable Wine List */}
-            <div className="px-4 sm:px-6 lg:px-8 bg-white">
-                {filteredWines.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {filteredWines.map((wine) => (
-                            <WineCard key={wine.id || Math.random()} wine={wine} />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-stone-200">
-                        <div className="w-16 h-16 bg-stone-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg className="w-8 h-8 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
-                        </div>
-                        <h3 className="text-lg font-medium text-stone-900">등록된 와인이 없습니다</h3>
-                        <p className="text-stone-500 mt-1">새로운 와인을 등록해보세요.</p>
-                    </div>
-                )}
-            </div>
-
-            {/* Floating Action Button (Centered above bottom nav) */}
-            <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50">
-                <Link to="/add">
-                    <button className="bg-[#EF1403] hover:bg-[#c60b00] text-white shadow-lg flex items-center justify-center gap-2 transition-all duration-300 active:scale-95 h-10 px-6 rounded-full whitespace-nowrap">
-                        <span className="text-sm font-bold">와인 등록</span>
-                    </button>
-                </Link>
-            </div>
-        </div>
-    );
+            );
 }

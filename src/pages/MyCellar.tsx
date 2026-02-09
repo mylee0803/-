@@ -95,12 +95,15 @@ export default function MyCellar() {
             {/* Category Tabs - Sticky under header */}
             <div className="sticky top-[40px] md:top-[90px] z-40 bg-white h-[40px] flex items-center shadow-none border-none">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div className="flex overflow-x-auto scrollbar-hide space-x-6">
+                    <div
+                        className="flex overflow-x-auto scrollbar-hide space-x-6"
+                        style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+                    >
                         {['All', 'Red', 'White', 'Sparkling', 'Rose', 'Dessert', 'Fortified'].map((type) => (
                             <button
                                 key={type}
                                 onClick={() => setSelectedType(type)}
-                                className={`whitespace-nowrap py-2 px-1 font-medium text-sm transition-all focus:outline-none ${selectedType === type
+                                className={`whitespace-nowrap relative z-10 py-2 px-1 font-medium text-sm transition-all focus:outline-none ${selectedType === type
                                     ? 'text-wine-900 shadow-[0_2px_0_0_#630E0A]'
                                     : 'text-stone-500 hover:text-stone-700'
                                     }`}

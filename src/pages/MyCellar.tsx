@@ -118,7 +118,8 @@ export default function MyCellar() {
                 </div>
             </div>
 
-            <div className="px-4 sm:px-6 lg:px-8 pt-[10px] bg-white relative z-30">
+            {/* Sticky Content Header (Count & Search) */}
+            <div className="sticky top-[80px] md:top-[120px] z-30 bg-white px-4 sm:px-6 lg:px-8 pt-[10px]">
                 <div className="flex justify-between items-center mb-[10px]">
                     <div className="text-sm text-stone-500">
                         총 <span className="font-semibold text-wine-900">{filteredWines.length}개</span>
@@ -148,8 +149,10 @@ export default function MyCellar() {
                         />
                     </div>
                 )}
+            </div>
 
-                {/* List */}
+            {/* Scrollable Wine List */}
+            <div className="px-4 sm:px-6 lg:px-8 bg-white">
                 {filteredWines.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {filteredWines.map((wine) => (

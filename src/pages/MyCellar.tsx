@@ -162,7 +162,7 @@ export default function MyCellar() {
             </div>
 
             {/* Scrollable Wine List */}
-            <div className="px-4 sm:px-6 lg:px-8 bg-white">
+            <div className="px-4 sm:px-6 lg:px-8 bg-white overflow-visible">
                 {filteredWines.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {filteredWines.map((wine) => (

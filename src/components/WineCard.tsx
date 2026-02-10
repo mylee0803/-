@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Star, Droplets } from 'lucide-react';
+import { MapPin, Star, Droplets } from 'lucide-react';
 import type { Wine, WineType } from '../types/wine';
 
 interface WineCardProps {
@@ -38,10 +38,10 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
     return (
         <div
             onClick={() => onClick && onClick(wine)}
-            className={`group relative rounded-md shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-row gap-3 p-3 bg-white`}
+            className="group relative bg-white rounded-[4px] shadow-[0_2px_10px_rgba(0,0,0,0.08)] border-none p-3 mb-3 flex flex-row gap-3 cursor-pointer hover:-translate-y-0.5 transition-transform duration-200"
         >
             {/* Image Section (Left, Compact) */}
-            <div className="relative w-[70px] h-[70px] flex-shrink-0 bg-stone-100 overflow-hidden rounded-md">
+            <div className="relative w-[60px] h-[60px] flex-shrink-0 bg-stone-100 overflow-hidden rounded-[4px]">
                 {wine.imageUrl ? (
                     <img
                         src={wine.imageUrl}

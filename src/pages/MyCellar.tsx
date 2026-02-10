@@ -36,8 +36,8 @@ export default function MyCellar() {
                     name: item.name || item.Name || 'Unnamed Wine',
                     name_kr: item.name_kr || item.Name_kr || item.nameKr || item.NameKr || '',
                     type: item.type || item.Type || 'Red',
-                    country: item.country || item.Country || 'Unknown',
-                    region: item.region || item.Region || 'Unknown',
+                    country: item.country || item.Country || undefined,
+                    region: item.region || item.Region || undefined,
                     abv: (item.abv || item.Abv || item.ABV) ? Number(item.abv || item.Abv || item.ABV) : undefined,
                     price: Number(item.price || item.Price) || undefined,
                     tastingDate: item.tastingDate || item.TastingDate || new Date().toISOString()

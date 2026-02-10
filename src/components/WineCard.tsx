@@ -38,7 +38,7 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
     return (
         <div
             onClick={() => onClick && onClick(wine)}
-            className="group relative bg-white rounded-[4px] shadow-[0_2px_10px_rgba(0,0,0,0.08)] border-none p-3 mb-3 flex flex-row gap-3 cursor-pointer hover:-translate-y-0.5 transition-transform duration-200"
+            className="group relative bg-white rounded-[4px] shadow-[0_2px_4px_0_rgba(0,0,0,0.04)] border-none py-4 px-3 mb-1 flex flex-row gap-3 cursor-pointer hover:-translate-y-0.5 transition-transform duration-200"
         >
             {/* Image Section (Left, Compact) */}
             <div className="relative w-[60px] h-[60px] flex-shrink-0 bg-stone-100 overflow-hidden rounded-[4px]">

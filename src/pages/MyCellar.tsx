@@ -25,65 +25,59 @@ export default function MyCellar() {
                     throw new Error('Received invalid data format from server');
                 }
 
-                // Helper for Notion-like or nested data structures
+                // Helper: Extract valid primitive from Notion structure
                 const extractValue = (val: any): any => {
                     if (val === null || val === undefined) return undefined;
 
-                    // 1. Array handling (RichText, Relation, MultiSelect) - Arrays often contain objects with 'plain_text' or 'name'
+                    // Arrays (RichText, Relations) - take first
                     if (Array.isArray(val)) {
-                        if (val.length === 0) return undefined;
-                        // Join text if multiple parts? usually taking first is enough for simple fields, but for rich text lines, join might be better. 
-                        // But for now, let's take the first non-empty value to be safe, or map and join?
-                        // Simple approach: Take first.
-                        return extractValue(val[0]);
+                        return val.length > 0 ? extractValue(val[0]) : undefined;
                     }
 
-                    // 2. Object handling (Notion properties)
+                    // Objects (Select, Number, RichText item)
                     if (typeof val === 'object') {
-                        if ('plain_text' in val) return val.plain_text;  // Title/RichText
-                        if ('name' in val) return val.name;              // Select/MultiSelect
-                        if ('number' in val) return val.number;          // Number
+                        if ('plain_text' in val) return val.plain_text;
+                        if ('name' in val) return val.name;
+                        if ('number' in val) return val.number;
                         if ('content' in val) return val.content;
-                        if ('url' in val) return val.url;
                     }
 
-                    // 3. Primitive handling
-                    return val;
+                    return val; // Primitive
                 };
 
-                // Ensure data matches Wine interface partially
                 const safeData: Wine[] = data.map((item: any) => {
-                    // Try to get values from various possible keys (handling capitalization)
-                    const rawNameKey = item.Name_en || item.Name || item.name;
-                    const rawNameKrKey = item.Name_kr || item.Name_KR || item.name_kr || item.NameKr || item.nameKr;
-                    const rawCountryKey = item.Country || item.country;
-                    const rawRegionKey = item.Region || item.region;
-                    const rawRatingKey = item.Rating || item.rating;
-                    const rawPriceKey = item.Price || item.price;
-                    const rawAbvKey = item.Abv || item.ABV || item.abv;
-                    const rawVintageKey = item.Vintage || item.vintage;
-                    const rawTypeKey = item.Type || item.type;
-                    const rawProducerKey = item.Producer || item.producer;
+                    // 1. Extract raw fields (Notion keys are capitalized usually)
+                    const n_NameEn = extractValue(item.Name_en || item.Name || item.name);
+                    const n_NameKr = extractValue(item.Name_kr || item.Name_KR || item.name_kr);
+                    const n_Producer = extractValue(item.Producer || item.producer);
+                    const n_Country = extractValue(item.Country || item.country);
+                    const n_Region = extractValue(item.Region || item.region);
+                    const n_Rating = extractValue(item.Rating || item.rating);
+                    const n_Price = extractValue(item.Price || item.price);
+                    const n_Abv = extractValue(item.Abv || item.ABV || item.abv);
+                    const n_Vintage = extractValue(item.Vintage || item.vintage);
+                    const n_Type = extractValue(item.Type || item.type);
+
+                    // 2. Clean & Map (Strict Logic)
+                    // name: English Name (fallback to Producer if name missing)
+                    const cleanName = n_NameEn || n_Producer || 'Unnamed Wine';
+                    // name_kr: Korean Name
+                    const cleanNameKr = n_NameKr || '';
 
                     return {
-                        ...item,
                         id: item.id || item.Id || Math.random().toString(36).substr(2, 9),
-
-                        // Extract and cast types strictly
-                        rating: Number(extractValue(rawRatingKey)) || 0,
-                        vintage: Number(extractValue(rawVintageKey)) || new Date().getFullYear(),
-                        price: Number(extractValue(rawPriceKey)) || undefined,
-                        abv: rawAbvKey ? Number(extractValue(rawAbvKey)) : undefined,
-
-                        // Extract strings
-                        name: extractValue(rawNameKey) || 'Unnamed Wine',
-                        name_kr: extractValue(rawNameKrKey) || '',
-                        type: extractValue(rawTypeKey) || 'Red',
-                        country: extractValue(rawCountryKey) || undefined,
-                        region: extractValue(rawRegionKey) || undefined,
-                        producer: extractValue(rawProducerKey) || undefined,
-
-                        tastingDate: item.tastingDate || item.TastingDate || new Date().toISOString()
+                        name: cleanName,
+                        name_kr: cleanNameKr,
+                        producer: n_Producer || '',
+                        vintage: Number(n_Vintage) || new Date().getFullYear(),
+                        type: n_Type || 'Red',
+                        country: n_Country || '', // Pass empty if missing to let UI handle fallback
+                        region: n_Region || '',
+                        rating: Number(n_Rating) || 0,
+                        price: Number(n_Price) || undefined,
+                        abv: n_Abv ? Number(n_Abv) : undefined,
+                        tastingDate: item.tastingDate || item.TastingDate || new Date().toISOString(),
+                        notes: extractValue(item.Notes || item.notes) || ''
                     };
                 });
 

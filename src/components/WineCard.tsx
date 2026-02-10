@@ -73,14 +73,14 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                 </div>
 
                 <div>
-                    {/* Primary Title (Korean preferred) */}
+                    {/* Primary Title (Korean preferred, fallback to English) */}
                     <h3 className="text-base font-serif font-bold text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors line-clamp-1 pr-8">
-                        {wine.name_kr || wine.name || '이름 없음'}
+                        {wine.name_kr || wine.name || 'Name'}
                     </h3>
 
-                    {/* Secondary Title (English Name) */}
-                    <p className="text-[10px] text-stone-400 font-medium line-clamp-1 mb-1 pr-4">
-                        {wine.name}
+                    {/* Secondary Title (English Name) - Only show if Korean name exists to avoid duplication */}
+                    <p className="text-[10px] text-stone-400 font-medium line-clamp-1 mb-1 pr-4 min-h-[15px]">
+                        {wine.name_kr ? wine.name : ''}
                     </p>
 
                     {/* Metadata Row */}
@@ -90,7 +90,7 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                         </span>
                         <span className="w-px h-2 bg-stone-300"></span>
                         <span className="truncate max-w-[80px]">
-                            {wine.country || '국가 미정'}
+                            {wine.country || '-'}
                         </span>
                         <span className="w-px h-2 bg-stone-300"></span>
                         <span className="text-stone-400">
@@ -105,7 +105,7 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                         <div className="flex items-center gap-1 text-stone-400">
                             <MapPin className="w-2.5 h-2.5" />
                             <span className="text-[10px] truncate max-w-[60px]">
-                                {wine.region || '지역 미정'}
+                                {wine.region || '-'}
                             </span>
                         </div>
                     </div>

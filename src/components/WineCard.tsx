@@ -78,9 +78,9 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                         {wine.name_kr || wine.name || '이름 없음'}
                     </h3>
 
-                    {/* Secondary Title (English Name) - Below Korean */}
+                    {/* Secondary Title (English Name) */}
                     <p className="text-[10px] text-stone-400 font-medium line-clamp-1 mb-1 pr-4">
-                        {wine.name_kr ? wine.name : (wine.producer || '생산자 미상')}
+                        {wine.name_kr && wine.name ? wine.name : ''}
                     </p>
 
                     {/* Metadata Row */}

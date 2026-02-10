@@ -25,23 +25,60 @@ export default function MyCellar() {
                     throw new Error('Received invalid data format from server');
                 }
 
+                // Helper for Notion-like or nested data structures
+                const extractValue = (val: any): any => {
+                    if (val === null || val === undefined) return undefined;
+                    // If it's already a primitive, return it
+                    if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') return val;
+
+                    // Handle Arrays (take first item or join if needed, but for single fields take first)
+                    if (Array.isArray(val)) {
+                        return val.length > 0 ? extractValue(val[0]) : undefined;
+                    }
+
+                    // Handle Objects (Notion properties)
+                    if (typeof val === 'object') {
+                        if ('number' in val) return val.number;
+                        if ('name' in val) return val.name; // Select, Multi-select item
+                        if ('plain_text' in val) return val.plain_text; // Rich text
+                        if ('content' in val) return val.content;
+                        if ('url' in val) return val.url;
+                    }
+
+                    return undefined;
+                };
+
                 // Ensure data matches Wine interface partially
-                const safeData: Wine[] = data.map((item: any) => ({
-                    ...item,
-                    ...item,
-                    id: item.id || item.Id || Math.random().toString(36).substr(2, 9),
-                    rating: Number(item.rating || item.Rating) || 0,
-                    vintage: Number(item.vintage || item.Vintage) || new Date().getFullYear(),
-                    // Basic fallbacks with case-insensitive checks
-                    name: item.name || item.Name || 'Unnamed Wine',
-                    name_kr: item.name_kr || item.Name_kr || item.nameKr || item.NameKr || '',
-                    type: item.type || item.Type || 'Red',
-                    country: item.country || item.Country || undefined,
-                    region: item.region || item.Region || undefined,
-                    abv: (item.abv || item.Abv || item.ABV) ? Number(item.abv || item.Abv || item.ABV) : undefined,
-                    price: Number(item.price || item.Price) || undefined,
-                    tastingDate: item.tastingDate || item.TastingDate || new Date().toISOString()
-                }));
+                const safeData: Wine[] = data.map((item: any) => {
+                    // Normalize keys (handle case variances)
+                    const rawName = item.name || item.Name || item.Name_en;
+                    const rawNameKr = item.name_kr || item.Name_kr || item.Name_KR || item.nameKr || item.NameKr;
+                    const rawVintage = item.vintage || item.Vintage;
+                    const rawRating = item.rating || item.Rating;
+                    const rawType = item.type || item.Type;
+                    const rawCountry = item.country || item.Country;
+                    const rawRegion = item.region || item.Region;
+                    const rawAbv = item.abv || item.Abv || item.ABV;
+                    const rawPrice = item.price || item.Price;
+                    const rawProducer = item.producer || item.Producer;
+
+                    return {
+                        ...item,
+                        id: item.id || item.Id || Math.random().toString(36).substr(2, 9),
+                        rating: Number(extractValue(rawRating)) || 0,
+                        vintage: Number(extractValue(rawVintage)) || new Date().getFullYear(),
+                        // Basic fallbacks with extracted values
+                        name: extractValue(rawName) || 'Unnamed Wine',
+                        name_kr: extractValue(rawNameKr) || '',
+                        type: extractValue(rawType) || 'Red',
+                        country: extractValue(rawCountry) || undefined,
+                        region: extractValue(rawRegion) || undefined,
+                        abv: rawAbv ? Number(extractValue(rawAbv)) : undefined,
+                        price: Number(extractValue(rawPrice)) || undefined,
+                        producer: extractValue(rawProducer) || undefined,
+                        tastingDate: item.tastingDate || item.TastingDate || new Date().toISOString()
+                    };
+                });
 
                 setWines(safeData);
             } catch (err: any) {

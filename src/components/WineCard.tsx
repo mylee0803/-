@@ -80,7 +80,7 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
 
                     {/* Secondary Title (English Name) */}
                     <p className="text-[10px] text-stone-400 font-medium line-clamp-1 mb-1 pr-4">
-                        {wine.name_kr && wine.name ? wine.name : ''}
+                        {wine.name}
                     </p>
 
                     {/* Metadata Row */}
@@ -111,7 +111,7 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                     </div>
 
                     <span className="text-[10px] font-bold text-stone-900">
-                        {wine.price ? `₩${(wine.price / 10000).toLocaleString()}만` : '-'}
+                        {wine.price ? `₩${(wine.price / 10000).toLocaleString()}만원` : '-'}
                     </span>
                 </div>
             </div>

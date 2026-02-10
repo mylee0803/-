@@ -28,57 +28,71 @@ export default function MyCellar() {
                 // Helper for Notion-like or nested data structures
                 const extractValue = (val: any): any => {
                     if (val === null || val === undefined) return undefined;
-                    // If it's already a primitive, return it
-                    if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') return val;
 
-                    // Handle Arrays (take first item or join if needed, but for single fields take first)
+                    // 1. Array handling (RichText, Relation, MultiSelect) - Arrays often contain objects with 'plain_text' or 'name'
                     if (Array.isArray(val)) {
-                        return val.length > 0 ? extractValue(val[0]) : undefined;
+                        if (val.length === 0) return undefined;
+                        // Join text if multiple parts? usually taking first is enough for simple fields, but for rich text lines, join might be better. 
+                        // But for now, let's take the first non-empty value to be safe, or map and join?
+                        // Simple approach: Take first.
+                        return extractValue(val[0]);
                     }
 
-                    // Handle Objects (Notion properties)
+                    // 2. Object handling (Notion properties)
                     if (typeof val === 'object') {
-                        if ('number' in val) return val.number;
-                        if ('name' in val) return val.name; // Select, Multi-select item
-                        if ('plain_text' in val) return val.plain_text; // Rich text
+                        if ('plain_text' in val) return val.plain_text;  // Title/RichText
+                        if ('name' in val) return val.name;              // Select/MultiSelect
+                        if ('number' in val) return val.number;          // Number
                         if ('content' in val) return val.content;
                         if ('url' in val) return val.url;
                     }
 
-                    return undefined;
+                    // 3. Primitive handling
+                    return val;
                 };
 
                 // Ensure data matches Wine interface partially
                 const safeData: Wine[] = data.map((item: any) => {
-                    // Normalize keys (handle case variances)
-                    const rawName = item.name || item.Name || item.Name_en;
-                    const rawNameKr = item.name_kr || item.Name_kr || item.Name_KR || item.nameKr || item.NameKr;
-                    const rawVintage = item.vintage || item.Vintage;
-                    const rawRating = item.rating || item.Rating;
-                    const rawType = item.type || item.Type;
-                    const rawCountry = item.country || item.Country;
-                    const rawRegion = item.region || item.Region;
-                    const rawAbv = item.abv || item.Abv || item.ABV;
-                    const rawPrice = item.price || item.Price;
-                    const rawProducer = item.producer || item.Producer;
+                    // Try to get values from various possible keys (handling capitalization)
+                    const rawNameKey = item.Name_en || item.Name || item.name;
+                    const rawNameKrKey = item.Name_kr || item.Name_KR || item.name_kr || item.NameKr || item.nameKr;
+                    const rawCountryKey = item.Country || item.country;
+                    const rawRegionKey = item.Region || item.region;
+                    const rawRatingKey = item.Rating || item.rating;
+                    const rawPriceKey = item.Price || item.price;
+                    const rawAbvKey = item.Abv || item.ABV || item.abv;
+                    const rawVintageKey = item.Vintage || item.vintage;
+                    const rawTypeKey = item.Type || item.type;
+                    const rawProducerKey = item.Producer || item.producer;
 
                     return {
                         ...item,
                         id: item.id || item.Id || Math.random().toString(36).substr(2, 9),
-                        rating: Number(extractValue(rawRating)) || 0,
-                        vintage: Number(extractValue(rawVintage)) || new Date().getFullYear(),
-                        // Basic fallbacks with extracted values
-                        name: extractValue(rawName) || 'Unnamed Wine',
-                        name_kr: extractValue(rawNameKr) || '',
-                        type: extractValue(rawType) || 'Red',
-                        country: extractValue(rawCountry) || undefined,
-                        region: extractValue(rawRegion) || undefined,
-                        abv: rawAbv ? Number(extractValue(rawAbv)) : undefined,
-                        price: Number(extractValue(rawPrice)) || undefined,
-                        producer: extractValue(rawProducer) || undefined,
+
+                        // Extract and cast types strictly
+                        rating: Number(extractValue(rawRatingKey)) || 0,
+                        vintage: Number(extractValue(rawVintageKey)) || new Date().getFullYear(),
+                        price: Number(extractValue(rawPriceKey)) || undefined,
+                        abv: rawAbvKey ? Number(extractValue(rawAbvKey)) : undefined,
+
+                        // Extract strings
+                        name: extractValue(rawNameKey) || 'Unnamed Wine',
+                        name_kr: extractValue(rawNameKrKey) || '',
+                        type: extractValue(rawTypeKey) || 'Red',
+                        country: extractValue(rawCountryKey) || undefined,
+                        region: extractValue(rawRegionKey) || undefined,
+                        producer: extractValue(rawProducerKey) || undefined,
+
                         tastingDate: item.tastingDate || item.TastingDate || new Date().toISOString()
                     };
                 });
+
+                if (data.length > 0) {
+                    console.group('[MyCellar] Data Mapping Debug');
+                    console.log('Raw Node Data (First Item):', data[0]);
+                    console.log('Mapped Wine Data (First Item):', safeData[0]);
+                    console.groupEnd();
+                }
 
                 setWines(safeData);
             } catch (err: any) {

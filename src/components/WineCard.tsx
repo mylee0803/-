@@ -38,10 +38,10 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
     return (
         <div
             onClick={() => onClick && onClick(wine)}
-            className={`group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border cursor-pointer flex flex-row h-36 bg-white`}
+            className={`group relative rounded-md shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-row gap-3 p-3 bg-white`}
         >
-            {/* Image Section (Left, Square) */}
-            <div className="relative w-36 h-full flex-shrink-0 bg-stone-100 overflow-hidden">
+            {/* Image Section (Left, Compact) */}
+            <div className="relative w-[70px] h-[70px] flex-shrink-0 bg-stone-100 overflow-hidden rounded-md">
                 {wine.imageUrl ? (
                     <img
                         src={wine.imageUrl}
@@ -50,12 +50,12 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                     />
                 ) : (
                     <div className={`w-full h-full flex items-center justify-center ${cardStyles}`}>
-                        <Droplets className="w-8 h-8 opacity-20" />
+                        <Droplets className="w-5 h-5 opacity-20" />
                     </div>
                 )}
 
                 {/* Type Badge (Top Left, Small) */}
-                <div className={`absolute top-2 left-2 px-1.5 py-0.5 rounded-full text-[10px] font-bold backdrop-blur-md shadow-sm ${labelStyles}`}>
+                <div className={`absolute top-1 left-1 px-1 py-0.5 rounded-full text-[8px] font-bold backdrop-blur-md shadow-sm ${labelStyles}`}>
                     {wine.type === 'Red' ? 'RED' :
                         wine.type === 'White' ? 'WHT' :
                             wine.type === 'Rose' ? 'ROS' :
@@ -65,10 +65,10 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
             </div>
 
             {/* Content Section (Right) */}
-            <div className="flex-grow p-4 flex flex-col justify-between relative overflow-hidden">
+            <div className="flex-grow flex flex-col justify-between relative overflow-hidden py-0.5">
                 {/* Rating (Absolute Top Right) */}
                 {wine.rating > 0 && (
-                    <div className="absolute top-3 right-3 flex items-center gap-1">
+                    <div className="absolute top-0 right-0 flex items-center gap-1">
                         <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
                         <span className="text-xs font-bold text-stone-600">{wine.rating}</span>
                     </div>
@@ -76,60 +76,51 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
 
                 <div>
                     {/* Primary Title (Korean preferred) */}
-                    <h3 className="text-lg font-serif font-bold text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors line-clamp-1 pr-8">
+                    <h3 className="text-base font-serif font-bold text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors line-clamp-1 pr-8">
                         {wine.name_kr || wine.name}
                     </h3>
 
                     {/* Secondary Title (English Name) - Below Korean */}
-                    <p className="text-xs text-stone-400 font-medium line-clamp-1 mb-2 pr-4">
+                    <p className="text-[10px] text-stone-400 font-medium line-clamp-1 mb-1 pr-4">
                         {wine.name_kr ? wine.name : wine.producer}
                     </p>
 
                     {/* Metadata Row */}
-                    <div className="flex items-center gap-2 text-xs text-stone-500 mb-1">
+                    <div className="flex items-center gap-2 text-[10px] text-stone-500">
                         <span className="font-semibold text-wine-900/80">
                             {wine.vintage > 0 ? wine.vintage : 'NV'}
                         </span>
-                        <span className="w-0.5 h-2.5 bg-stone-300"></span>
+                        <span className="w-px h-2 bg-stone-300"></span>
                         <span className="truncate max-w-[100px]">
                             {wine.country}
                         </span>
                         {wine.abv && (
                             <>
-                                <span className="w-0.5 h-2.5 bg-stone-300"></span>
+                                <span className="w-px h-2 bg-stone-300"></span>
                                 <span className="text-stone-400">{wine.abv}%</span>
                             </>
                         )}
                     </div>
                 </div>
 
-                {/* Footer Icon Row */}
-                <div className="flex items-center justify-between mt-1 pt-2 border-t border-stone-100">
-                    <div className="flex items-center gap-3">
+                {/* Footer Icon Row - Adjusted for compact */}
+                <div className="flex items-center justify-between mt-1 pt-1.5 border-t border-stone-100">
+                    <div className="flex items-center gap-2">
                         <div className="flex items-center gap-1 text-stone-400">
-                            <MapPin className="w-3 h-3" />
-                            <span className="text-[10px] truncate max-w-[80px]">
+                            <MapPin className="w-2.5 h-2.5" />
+                            <span className="text-[10px] truncate max-w-[60px]">
                                 {wine.region}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-1 text-stone-400">
-                            <Calendar className="w-3 h-3" />
-                            <span className="text-[10px]">
-                                {new Date(wine.tastingDate).toLocaleDateString().slice(2)}
                             </span>
                         </div>
                     </div>
 
                     {wine.price && (
-                        <span className="text-xs font-bold text-stone-900">
+                        <span className="text-[10px] font-bold text-stone-900">
                             ₩{(wine.price / 10000).toFixed(0)}만
                         </span>
                     )}
                 </div>
             </div>
-
-            {/* Hover Color Line at Left Border (optional accent) */}
-            <div className={`absolute left-0 top-0 bottom-0 w-1 ${cardStyles.split(' ')[0].replace('bg-', 'bg-').replace('50', '400')} opacity-0 group-hover:opacity-100 transition-opacity`} />
         </div>
     );
 }

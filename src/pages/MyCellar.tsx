@@ -28,17 +28,19 @@ export default function MyCellar() {
                 // Ensure data matches Wine interface partially
                 const safeData: Wine[] = data.map((item: any) => ({
                     ...item,
-                    id: item.id || Math.random().toString(36).substr(2, 9),
-                    rating: Number(item.rating) || 0,
-                    vintage: Number(item.vintage) || new Date().getFullYear(),
-                    // Basic fallbacks
-                    name: item.name || 'Unnamed Wine',
-                    name_kr: item.name_kr || '',
-                    type: item.type || 'Red',
-                    country: item.country || 'Unknown',
-                    region: item.region || 'Unknown',
-                    abv: item.abv ? Number(item.abv) : undefined,
-                    tastingDate: item.tastingDate || new Date().toISOString()
+                    ...item,
+                    id: item.id || item.Id || Math.random().toString(36).substr(2, 9),
+                    rating: Number(item.rating || item.Rating) || 0,
+                    vintage: Number(item.vintage || item.Vintage) || new Date().getFullYear(),
+                    // Basic fallbacks with case-insensitive checks
+                    name: item.name || item.Name || 'Unnamed Wine',
+                    name_kr: item.name_kr || item.Name_kr || item.nameKr || item.NameKr || '',
+                    type: item.type || item.Type || 'Red',
+                    country: item.country || item.Country || 'Unknown',
+                    region: item.region || item.Region || 'Unknown',
+                    abv: (item.abv || item.Abv || item.ABV) ? Number(item.abv || item.Abv || item.ABV) : undefined,
+                    price: Number(item.price || item.Price) || undefined,
+                    tastingDate: item.tastingDate || item.TastingDate || new Date().toISOString()
                 }));
 
                 setWines(safeData);

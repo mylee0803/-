@@ -87,8 +87,8 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                 </div>
 
                 <div className="pr-8">
-                    {/* Primary Title (Korean preferred, fallback to English) - Gmarket Sans Light */}
-                    <h3 className="text-base font-['GmarketSansLight'] text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors truncate">
+                    {/* Primary Title (Korean preferred, fallback to English) - Gyeonggi Title */}
+                    <h3 className="text-base font-['GyeonggiTitleM'] text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors truncate">
                         {truncateText(wine.nameKr || wine.nameEn, 12)}
                     </h3>
 

@@ -61,47 +61,49 @@ export async function submitWineEntry(data: WineSubmission): Promise<void> {
     }
 }
 
-// Hardcoded URL for testing network connectivity as requested
-const listUrl = 'https://unscarved-dictatorially-dulce.ngrok-free.dev/webhook/get-wines' + `?t=${new Date().getTime()}`;
-console.group('[API] Fetching Wines');
-console.log('Target URL:', listUrl);
-console.log('Headers:', getCommonHeaders());
-console.groupEnd();
 
-try {
-    const response = await fetch(listUrl, {
-        headers: getCommonHeaders(),
-    });
-
-    const rawText = await response.text();
-
-    // Check for HTML response (ngrok warning or error page)
-    if (rawText.trim().startsWith('<!DOCTYPE html>') || rawText.includes('ngrok-skip-browser-warning')) {
-        console.error('[API] Server returned HTML instead of JSON. Likely an ngrok warning page or firewall issue.');
-        console.error('Raw Response Preview:', rawText.substring(0, 500));
-        throw new Error('서버 연결 방화벽 확인 필요 (HTML 응답 감지됨)');
-    }
-
-    if (!response.ok) {
-        throw new Error(`서버 응답 오류 (${response.status}): ${response.statusText}`);
-    }
+export async function fetchWines(): Promise<any[]> {
+    // Hardcoded URL for testing network connectivity as requested
+    const listUrl = `https://unscarved-dictatorially-dulce.ngrok-free.dev/webhook/get-wines?t=${Date.now()}`;
+    console.group('[API] Fetching Wines');
+    console.log('Target URL:', listUrl);
+    console.log('Headers:', getCommonHeaders());
+    console.groupEnd();
 
     try {
-        return JSON.parse(rawText);
-    } catch (jsonError) {
-        console.error('[API] JSON Parse Error. Raw Text:', rawText);
-        throw new Error('서버 응답 데이터 형식이 올바르지 않습니다.');
+        const response = await fetch(listUrl, {
+            headers: getCommonHeaders(),
+        });
+
+        const rawText = await response.text();
+
+        // Check for HTML response (ngrok warning or error page)
+        if (rawText.trim().startsWith('<!DOCTYPE html>') || rawText.includes('ngrok-skip-browser-warning')) {
+            console.error('[API] Server returned HTML instead of JSON. Likely an ngrok warning page or firewall issue.');
+            console.error('Raw Response Preview:', rawText.substring(0, 500));
+            throw new Error('서버 연결 방화벽 확인 필요 (HTML 응답 감지됨)');
+        }
+
+        if (!response.ok) {
+            throw new Error(`서버 응답 오류 (${response.status}): ${response.statusText}`);
+        }
+
+        try {
+            return JSON.parse(rawText);
+        } catch (jsonError) {
+            console.error('[API] JSON Parse Error. Raw Text:', rawText);
+            throw new Error('서버 응답 데이터 형식이 올바르지 않습니다.');
+        }
+
+    } catch (error: any) {
+        console.error('[API] fetchWines Error:', error);
+
+        if (error.message === 'Failed to fetch') {
+            throw new Error('서버에 연결할 수 없습니다. 인터넷 설정이나 API URL 설정을 확인해주세요.');
+        }
+
+        throw error;
     }
-
-} catch (error: any) {
-    console.error('[API] fetchWines Error:', error);
-
-    if (error.message === 'Failed to fetch') {
-        throw new Error('서버에 연결할 수 없습니다. 인터넷 설정이나 API URL 설정을 확인해주세요.');
-    }
-
-    throw error;
-}
 }
 
 export async function analyzeWineLabel(base64Image: string): Promise<Partial<WineSubmission>> {

@@ -9,11 +9,12 @@ export default function TastingNotes() {
     const sortedNotes = useMemo(() => {
         return mockWines
             .filter((wine) => {
-                return wine.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                return wine.nameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    wine.nameKr?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     wine.producer?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    wine.notes?.toLowerCase().includes(searchQuery.toLowerCase());
+                    wine.note?.toLowerCase().includes(searchQuery.toLowerCase());
             })
-            .sort((a, b) => new Date(b.tastingDate).getTime() - new Date(a.tastingDate).getTime());
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     }, [searchQuery]);
 
     return (

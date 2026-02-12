@@ -88,7 +88,7 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
 
                 <div className="pr-8">
                     {/* Primary Title (Korean preferred, fallback to English) - Sans-serif, Bold */}
-                    <h3 className="text-base font-bold text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors truncate">
+                    <h3 className="text-base font-sans font-bold text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors truncate">
                         {truncateText(wine.nameKr || wine.nameEn, 12)}
                     </h3>
 

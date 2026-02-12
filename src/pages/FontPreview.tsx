@@ -6,67 +6,67 @@ export default function FontPreview() {
 
     const fontsSophisticated = [
         {
-            name: '1. Pretendard (프리텐다드)',
-            fontFamily: "font-['Pretendard']",
-            description: '현재 IT 업계 표준으로 불리는 가장 세련되고 깔끔한 폰트입니다.',
+            name: '1. The Jamsil (더 잠실)',
+            fontFamily: "font-['TheJamsil']",
+            description: '롯데마트의 아이덴티티를 담은 모던하고 단단한 서체입니다. 힘이 느껴집니다.',
             weight: 'font-light'
         },
         {
-            name: '2. Wanted Sans (원티드 산스)',
-            fontFamily: "font-['Wanted_Sans']",
-            description: '가독성과 균형미가 뛰어난 최신 폰트입니다. 군더더기 없습니다.',
+            name: '2. LINE Seed KR (라인 씨드)',
+            fontFamily: "font-['LINESeedKR-Bd']",
+            description: '기하학적인 모양이 돋보이는 라인의 전용 서체입니다. 깔끔함의 정석입니다.',
             weight: 'font-normal'
         },
         {
-            name: '3. NanumSquare Neo (나눔스퀘어 네오)',
-            fontFamily: "font-['NanumSquareNeo']",
-            description: '직선적인 매력의 나눔스퀘어를 현대적으로 다듬어 매우 안정적입니다.',
+            name: '3. Spoqa Han Sans Neo (스포카 한 산스)',
+            fontFamily: "font-['SpoqaHanSansNeo-Regular']",
+            description: '한국어 UI에 최적화된 서체로, 숫자가 특히 예쁘고 가독성이 완벽합니다.',
             weight: 'font-normal'
         },
         {
-            name: '4. SUIT (수트)',
-            fontFamily: "font-['SUIT']",
-            description: '기하학적인 곡선이 특징인 모던 폰트입니다. 정장처럼 깔끔합니다.',
-            weight: 'font-light'
+            name: '4. Elice Digital Baeum (엘리스 배움체)',
+            fontFamily: "font-['EliceDigitalBaeum']",
+            description: '잉크 트랩(홈)이 독특한 매력을 주는 서체입니다. 스마트해 보입니다.',
+            weight: 'font-normal'
         },
         {
-            name: '5. Nexon Lv1 Gothic (넥슨 고딕)',
-            fontFamily: "font-['NexonLv1Gothic']",
-            description: '화면에서 가장 잘 보이도록 설계된 얇고 맑은 고딕체입니다.',
-            weight: 'font-light'
+            name: '5. S-Core Dream (에스코어 드림)',
+            fontFamily: "font-['S-CoreDream-3Light']",
+            description: '꽉 찬 직사각형 구조로 시원시원한 느낌을 줍니다. 제목용으로 훌륭합니다.',
+            weight: 'font-normal'
         }
     ];
 
     const fontsWineVibe = [
         {
-            name: '6. Mapo Flower Island (마포꽃섬)',
+            name: '6. Mapo Flower Island (마포꽃섬) - Current Pick',
             fontFamily: "font-['MapoFlowerIsland']",
-            description: '섬세하고 우아한 느낌의 산세리프입니다. 꺾임이 없지만 감성적입니다.',
+            description: '현재 선택하신 폰트입니다. 산세리프지만 꽃잎처럼 섬세한 끝처리가 우아합니다.',
             weight: 'font-normal'
         },
         {
-            name: '7. Cafe24 Ssurround Air (써라운드 에어)',
-            fontFamily: "font-['Cafe24SsurroundAir']",
-            description: '둥글고 부드러운 라인이 와인의 향과 바디감을 연상시킵니다.',
-            weight: 'font-light'
+            name: '7. Tmoney RoundWind (티머니 둥근바람)',
+            fontFamily: "font-['TmoneyRoundWind']",
+            description: '바람이 불듯 둥글고 부드러운 서체입니다. 와인의 부드러움을 표현하기 좋습니다.',
+            weight: 'font-normal'
         },
         {
-            name: '8. Gmarket Sans (지마켓 산스)',
-            fontFamily: "font-['GmarketSansMedium']",
-            description: '이미 보셨던 폰트로, 네모 반듯하면서도 트렌디한 느낌을 줍니다.',
-            weight: 'font-light'
+            name: '8. Cafe24 Ssurround (써라운드)',
+            fontFamily: "font-['Cafe24Ssurround']",
+            description: '동글동글한 모서리가 특징적인 폰트입니다. 귀엽고 친근한 분위기를 냅니다.',
+            weight: 'font-normal'
         },
         {
-            name: '9. Leferi Base (레페리 베이스)',
-            fontFamily: "font-['LeferiBase']",
-            description: '산세리프의 깔끔함 속에 아주 미세한 곡선미를 더해 고급스럽습니다.',
-            weight: 'font-bold'
+            name: '9. Chosun Centennial (조선100년체)',
+            fontFamily: "font-['ChosunCentennial']",
+            description: '고딕체 베이스에 명조의 획을 살짝 가미하여 고전미와 현대미가 공존합니다.',
+            weight: 'font-normal'
         },
         {
-            name: '10. PyeongChang Peace (평창평화체)',
-            fontFamily: "font-['PyeongChangPeace']",
-            description: '사선으로 뻗은 획이 유니크하며, 샴페인이나 스파클링 와인처럼 경쾌합니다.',
-            weight: 'font-light'
+            name: '10. Gyeonggi Title (경기천년제목)',
+            fontFamily: "font-['GyeonggiTitleM']",
+            description: '역사적인 느낌을 현대적으로 재해석한 서체입니다. 전통미와 신뢰감을 줍니다.',
+            weight: 'font-normal'
         }
     ];
 

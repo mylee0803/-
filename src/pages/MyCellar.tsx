@@ -18,11 +18,6 @@ export default function MyCellar() {
         const loadWines = async () => {
             try {
                 const data = await fetchWines();
-                console.log("Full Response:", data);
-                if (data.length > 0) {
-                    console.log("Data for Map (First Item):", data[0]);
-                    console.log("All Available Keys:", Object.keys(data[0])); // Check ALL keys
-                }
 
                 if (!Array.isArray(data)) {
                     console.error('[MyCellar] Data is not an array:', data);
@@ -60,12 +55,7 @@ export default function MyCellar() {
                     };
                 });
 
-                if (data.length > 0) {
-                    console.group('[MyCellar] Data Mapping Debug');
-                    console.log('Raw Node Data (First Item):', data[0]);
-                    console.log('Mapped Wine Data (First Item):', safeData[0]);
-                    console.groupEnd();
-                }
+                // Data Mapping Debug logs removed for production
 
                 setWines(safeData);
             } catch (err: any) {

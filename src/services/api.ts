@@ -55,7 +55,7 @@ export async function submitWineEntry(data: WineSubmission): Promise<void> {
 }
 
 export async function fetchWines(): Promise<any[]> {
-    const listUrl = getWebhookUrl(import.meta.env.VITE_N8N_LIST_URL, 'get-wines');
+    const listUrl = getWebhookUrl(import.meta.env.VITE_N8N_LIST_URL, 'get-wines') + `?t=${new Date().getTime()}`;
     console.log('[API] Fetching wines from:', listUrl);
 
     try {

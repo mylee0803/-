@@ -6,6 +6,7 @@ import TastingNotes from './pages/TastingNotes';
 import Statistics from './pages/Statistics';
 import BucketList from './pages/BucketList';
 import AddEntry from './pages/AddEntry';
+import FontPreview from './pages/FontPreview';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="statistics" element={<Statistics />} />
           <Route path="bucket-list" element={<BucketList />} />
           <Route path="add" element={<AddEntry />} />
+          <Route path="font-preview" element={<FontPreview />} />
         </Route>
       </Routes>
     </BrowserRouter>

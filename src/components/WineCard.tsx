@@ -35,10 +35,24 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
     const cardStyles = getTypeStyles(wine.type);
     const labelStyles = getTypeLabelColor(wine.type);
 
+    // Helper for word-based truncation
+    const truncateText = (text: string, maxLength: number) => {
+        if (!text) return '';
+        if (text.length <= maxLength) return text;
+
+        const truncated = text.substring(0, maxLength);
+        const lastSpaceIndex = truncated.lastIndexOf(' ');
+
+        if (lastSpaceIndex > 0) {
+            return truncated.substring(0, lastSpaceIndex) + '...';
+        }
+        return truncated + '...';
+    };
+
     return (
         <div
             onClick={() => onClick && onClick(wine)}
-            className="group relative bg-white rounded-[4px] shadow-[0_2px_4px_0_rgba(0,0,0,0.04)] border-none py-4 px-3 mb-1 flex flex-row gap-3 cursor-pointer hover:-translate-y-0.5 transition-transform duration-200"
+            className="group relative bg-white rounded-[4px] shadow-[0_2px_4px_0_rgba(0,0,0,0.04)] border-none py-4 px-3 mb-1 flex flex-row gap-3 cursor-pointer hover:-translate-y-0.5 transition-transform duration-200 h-[100px]"
         >
             {/* Image Section (Left, Compact) */}
             <div className="relative w-[60px] h-[60px] flex-shrink-0 bg-stone-100 overflow-hidden rounded-[4px]">
@@ -67,20 +81,20 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
             {/* Content Section (Right) */}
             <div className="flex-grow flex flex-col justify-between relative overflow-hidden py-0.5">
                 {/* Rating (Absolute Top Right) - Always Visible */}
-                <div className="absolute top-0 right-0 flex items-center gap-1">
+                <div className="absolute top-0 right-0 flex items-center gap-1 bg-white pl-2">
                     <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
                     <span className="text-xs font-bold text-stone-600">{wine.rating.toFixed(1)}</span>
                 </div>
 
-                <div>
-                    {/* Primary Title (Korean preferred, fallback to English) */}
-                    <h3 className="text-base font-serif font-bold text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors line-clamp-1 pr-8">
-                        {wine.nameKr || wine.nameEn}
+                <div className="pr-8">
+                    {/* Primary Title (Korean preferred, fallback to English) - Sans-serif, Bold */}
+                    <h3 className="text-base font-bold text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors truncate">
+                        {truncateText(wine.nameKr || wine.nameEn, 12)}
                     </h3>
 
-                    {/* Secondary Title (English Name or Producer) */}
-                    <p className="text-[10px] text-stone-400 font-medium line-clamp-1 mb-1 pr-4 min-h-[15px]">
-                        {wine.nameKr && wine.nameEn ? wine.nameEn : (wine.producer || '')}
+                    {/* Secondary Title (English Name or Producer) - Serif */}
+                    <p className="text-[11px] font-serif text-stone-500 font-medium mb-1 truncate">
+                        {truncateText(wine.nameKr && wine.nameEn ? wine.nameEn : (wine.producer || ''), 18)}
                     </p>
 
                     {/* Metadata Row */}

@@ -60,7 +60,10 @@ export default function MyCellar() {
                 setWines(safeData);
             } catch (err: any) {
                 console.error('[MyCellar] Load Error:', err);
-                setError(err.message || '와인 데이터를 불러오는데 실패했습니다.');
+                const errorMessage = err.message || '와인 데이터를 불러오는데 실패했습니다.';
+                setError(errorMessage);
+                // Alert for mobile debugging
+                alert(`[오류 발생] ${errorMessage}\n\n서버 연결 상태를 확인해주세요.`);
             } finally {
                 setLoading(false);
             }

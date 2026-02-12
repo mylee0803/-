@@ -17,8 +17,8 @@ export default function AddEntry() {
 
     // We keep some fields as strings for easier input handling, then convert on submit
     const [formData, setFormData] = useState({
-        name: '',
-        name_kr: '',
+        nameEn: '',
+        nameKr: '',
         producer: '',
         vintage: new Date().getFullYear().toString(),
         type: 'Red' as WineType,
@@ -28,8 +28,8 @@ export default function AddEntry() {
         rating: 0,
         price: '',
         purchasedAt: '',
-        tastingDate: new Date().toISOString().split('T')[0],
-        notes: ''
+        date: new Date().toISOString().split('T')[0],
+        note: ''
     });
 
     // Helper to resize image before upload to avoid payload limits
@@ -93,42 +93,38 @@ export default function AddEntry() {
 
             console.log('[AddEntry] Analysis result:', result);
 
-            // Extract values directly using English keys (as requested by user)
-            const extractedName = result.name || '';
-            const extractedNameKr = result.name_kr || '';
+            // Extract values directly using standardized keys
+            const extractedNameEn = result.nameEn || '';
+            const extractedNameKr = result.nameKr || '';
             const extractedProducer = result.producer || '';
             const extractedRegion = result.region || '';
             const extractedCountry = result.country || '';
             const extractedAbv = result.abv || '';
 
             // Validation: If no name found, assume failure
-            if (!extractedName.trim()) {
+            if (!extractedNameEn.trim() && !extractedNameKr.trim()) {
                 alert('라벨을 인식하지 못했습니다. 다시 촬영해 주세요. (이름 정보 누락)');
                 return;
             }
 
-            // Helper to sanitize vintage
+            // ... (helpers remain same)
             const safeVintage = (val: any, old: string) => {
                 if (!val) return old;
                 const match = val.toString().match(/\d{4}/);
                 return match ? match[0] : old;
             };
 
-            // Helper to sanitize price
             const safePrice = (val: any, old: string) => {
                 if (!val) return old;
                 return val.toString().replace(/[^0-9.]/g, '') || old;
             };
 
-            // Helper to sanitize ABV
             const safeAbv = (val: any, old: string) => {
                 if (!val) return old;
-                // Extract number, allow decimal
                 const match = val.toString().match(/[0-9.]+/);
                 return match ? match[0] : old;
             };
 
-            // Helper to normalize wine type
             const normalizeType = (val: string): WineType => {
                 if (!val) return 'Red';
                 const lower = val.toLowerCase();
@@ -145,8 +141,8 @@ export default function AddEntry() {
             // Update form with result
             setFormData(prev => ({
                 ...prev,
-                name: extractedName,
-                name_kr: extractedNameKr,
+                nameEn: extractedNameEn || extractedNameKr, // Fallback if En missing
+                nameKr: extractedNameKr,
                 producer: extractedProducer,
                 vintage: safeVintage(result.vintage, prev.vintage),
                 type: rawType ? normalizeType(rawType) : prev.type,
@@ -158,7 +154,6 @@ export default function AddEntry() {
 
         } catch (error: any) {
             console.error('[AddEntry] Analysis failed:', error);
-            // Show detailed error message from api.ts
             alert(`와인 라벨 분석 중 오류가 발생했습니다.\n\n${error.message}`);
         } finally {
             setIsAnalyzing(false);
@@ -170,8 +165,8 @@ export default function AddEntry() {
         setShowSuccessModal(false);
         // Reset form after modal is closed
         setFormData({
-            name: '',
-            name_kr: '',
+            nameEn: '',
+            nameKr: '',
             producer: '',
             vintage: new Date().getFullYear().toString(),
             type: 'Red',
@@ -181,8 +176,8 @@ export default function AddEntry() {
             rating: 0,
             price: '',
             purchasedAt: '',
-            tastingDate: new Date().toISOString().split('T')[0],
-            notes: ''
+            date: new Date().toISOString().split('T')[0],
+            note: ''
         });
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -196,10 +191,10 @@ export default function AddEntry() {
         try {
             setIsSubmitting(true);
 
-            // Prepare data for submission using English keys
+            // Prepare data for submission using standardized keys
             const submissionData: WineSubmission = {
-                name: formData.name,
-                name_kr: formData.name_kr,
+                nameEn: formData.nameEn,
+                nameKr: formData.nameKr,
                 producer: formData.producer,
                 vintage: parseInt(formData.vintage) || new Date().getFullYear(),
                 type: formData.type,
@@ -208,8 +203,8 @@ export default function AddEntry() {
                 abv: formData.abv ? parseFloat(formData.abv) : null,
                 rating: formData.rating,
                 price: parseFloat(formData.price) || 0,
-                tastingDate: formData.tastingDate,
-                notes: formData.notes,
+                date: formData.date,
+                note: formData.note,
                 purchasedAt: formData.purchasedAt
             };
 
@@ -218,7 +213,6 @@ export default function AddEntry() {
             await submitWineEntry(submissionData);
 
             console.log('Data sent successfully!');
-            // Show success modal instead of alert
             setShowSuccessModal(true);
 
         } catch (error) {
@@ -301,10 +295,10 @@ export default function AddEntry() {
                     </div>
 
                     <Input
-                        label="와인명"
-                        name="name"
+                        label="와인명 (영문)"
+                        name="nameEn"
                         placeholder="예: Château Margaux"
-                        value={formData.name}
+                        value={formData.nameEn}
                         onChange={handleChange}
                         required
                         className="md:col-span-2"
@@ -313,9 +307,9 @@ export default function AddEntry() {
 
                     <Input
                         label="와인명 (한글)"
-                        name="name_kr"
+                        name="nameKr"
                         placeholder="예: 샤토 마고"
-                        value={formData.name_kr}
+                        value={formData.nameKr}
                         onChange={handleChange}
                         className="md:col-span-2"
                         disabled={isSubmitting}
@@ -398,10 +392,10 @@ export default function AddEntry() {
 
                     <TextArea
                         label="테이스팅 노트"
-                        name="notes"
+                        name="note"
                         placeholder="색상, 향, 맛, 피니시 등을 기록해보세요..."
                         rows={5}
-                        value={formData.notes}
+                        value={formData.note}
                         onChange={handleChange}
                         disabled={isSubmitting}
                     />
@@ -409,9 +403,9 @@ export default function AddEntry() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <Input
                             label="시음일"
-                            name="tastingDate"
+                            name="date"
                             type="date"
-                            value={formData.tastingDate}
+                            value={formData.date}
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />

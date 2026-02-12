@@ -3,8 +3,8 @@
 import type { WineType } from '../types/wine';
 
 export interface WineSubmission {
-    name: string;
-    name_kr?: string;
+    nameEn: string;
+    nameKr?: string;
     producer?: string;
     vintage?: number;
     type: WineType;
@@ -13,8 +13,8 @@ export interface WineSubmission {
     abv?: number | null;
     price?: number;
     rating: number;
-    tastingDate: string;
-    notes?: string;
+    date: string;
+    note?: string;
     purchasedAt?: string;
     [key: string]: any; // Allow extra fields if needed
 }

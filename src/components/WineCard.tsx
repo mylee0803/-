@@ -45,7 +45,7 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                 {wine.imageUrl ? (
                     <img
                         src={wine.imageUrl}
-                        alt={wine.name}
+                        alt={wine.nameEn}
                         className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                     />
                 ) : (
@@ -69,32 +69,32 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                 {/* Rating (Absolute Top Right) - Always Visible */}
                 <div className="absolute top-0 right-0 flex items-center gap-1">
                     <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                    <span className="text-xs font-bold text-stone-600">{Number(wine.rating || 0).toFixed(1)}</span>
+                    <span className="text-xs font-bold text-stone-600">{wine.rating.toFixed(1)}</span>
                 </div>
 
                 <div>
                     {/* Primary Title (Korean preferred, fallback to English) */}
                     <h3 className="text-base font-serif font-bold text-stone-900 leading-tight mb-0.5 group-hover:text-wine-800 transition-colors line-clamp-1 pr-8">
-                        {wine.name_kr || wine.name || 'Name'}
+                        {wine.nameKr || wine.nameEn}
                     </h3>
 
-                    {/* Secondary Title (English Name) - Only show if Korean name exists to avoid duplication */}
+                    {/* Secondary Title (English Name or Producer) */}
                     <p className="text-[10px] text-stone-400 font-medium line-clamp-1 mb-1 pr-4 min-h-[15px]">
-                        {wine.name_kr ? wine.name : ''}
+                        {wine.nameKr && wine.nameEn ? wine.nameEn : (wine.producer || '')}
                     </p>
 
                     {/* Metadata Row */}
                     <div className="flex items-center gap-2 text-[10px] text-stone-500">
                         <span className="font-semibold text-wine-900/80">
-                            {wine.vintage > 0 ? wine.vintage : 'NV'}
+                            {wine.vintage > 0 ? wine.vintage : ''}
                         </span>
                         <span className="w-px h-2 bg-stone-300"></span>
                         <span className="truncate max-w-[80px]">
-                            {wine.country || '-'}
+                            {wine.country}
                         </span>
                         <span className="w-px h-2 bg-stone-300"></span>
                         <span className="text-stone-400">
-                            {wine.abv ? `${wine.abv}%` : '-'}
+                            {wine.abv ? `${wine.abv}%` : ''}
                         </span>
                     </div>
                 </div>
@@ -105,13 +105,13 @@ export default function WineCard({ wine, onClick }: WineCardProps) {
                         <div className="flex items-center gap-1 text-stone-400">
                             <MapPin className="w-2.5 h-2.5" />
                             <span className="text-[10px] truncate max-w-[60px]">
-                                {wine.region || '-'}
+                                {wine.region}
                             </span>
                         </div>
                     </div>
 
                     <span className="text-[10px] font-bold text-stone-900">
-                        {wine.price ? `₩${(wine.price / 10000).toLocaleString()}만원` : '-'}
+                        {wine.price ? `₩${(wine.price / 10000).toLocaleString()}만원` : ''}
                     </span>
                 </div>
             </div>

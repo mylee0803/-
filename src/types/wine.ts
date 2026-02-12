@@ -2,8 +2,8 @@ export type WineType = 'Red' | 'White' | 'Rose' | 'Sparkling' | 'Dessert' | 'For
 
 export interface Wine {
     id: string;
-    name: string;
-    name_kr?: string;
+    nameEn: string;
+    nameKr?: string;
     producer?: string;
     vintage: number;
     type: WineType;
@@ -12,7 +12,7 @@ export interface Wine {
     rating: number; // 0-5
     price?: number;
     abv?: number; // Alcohol by volume
-    tastingDate: string;
-    notes?: string;
+    date: string; // Was tastingDate
+    note?: string; // Was notes
     imageUrl?: string;
 }

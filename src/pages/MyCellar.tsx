@@ -18,66 +18,45 @@ export default function MyCellar() {
         const loadWines = async () => {
             try {
                 const data = await fetchWines();
-                console.log('[MyCellar] Fetched data:', data);
+                console.log("Full Response:", data);
+                if (data.length > 0) {
+                    console.log("Data for Map (First Item):", data[0]);
+                    console.log("All Available Keys:", Object.keys(data[0])); // Check ALL keys
+                }
 
                 if (!Array.isArray(data)) {
                     console.error('[MyCellar] Data is not an array:', data);
                     throw new Error('Received invalid data format from server');
                 }
 
-                // Helper: Extract valid primitive from Notion structure
-                const extractValue = (val: any): any => {
-                    if (val === null || val === undefined) return undefined;
-
-                    // Arrays (RichText, Relations) - take first
-                    if (Array.isArray(val)) {
-                        return val.length > 0 ? extractValue(val[0]) : undefined;
-                    }
-
-                    // Objects (Select, Number, RichText item)
-                    if (typeof val === 'object') {
-                        if ('plain_text' in val) return val.plain_text;
-                        if ('name' in val) return val.name;
-                        if ('number' in val) return val.number;
-                        if ('content' in val) return val.content;
-                    }
-
-                    return val; // Primitive
-                };
-
+                // Data is already flattened by n8n workflow
                 const safeData: Wine[] = data.map((item: any) => {
-                    // 1. Extract raw fields (Notion keys are capitalized usually)
-                    const n_NameEn = extractValue(item.Name_en || item.Name || item.name);
-                    const n_NameKr = extractValue(item.Name_kr || item.Name_KR || item.name_kr);
-                    const n_Producer = extractValue(item.Producer || item.producer);
-                    const n_Country = extractValue(item.Country || item.country);
-                    const n_Region = extractValue(item.Region || item.region);
-                    const n_Rating = extractValue(item.Rating || item.rating);
-                    const n_Price = extractValue(item.Price || item.price);
-                    const n_Abv = extractValue(item.Abv || item.ABV || item.abv);
-                    const n_Vintage = extractValue(item.Vintage || item.vintage);
-                    const n_Type = extractValue(item.Type || item.type);
+                    // Helper to get image URL safely
+                    const getImageUrl = (files: any[]) => {
+                        if (Array.isArray(files) && files.length > 0) {
+                            return files[0]?.file?.url || files[0]?.external?.url || files[0]?.url || undefined;
+                        }
+                        return undefined;
+                    };
 
-                    // 2. Clean & Map (Strict Logic)
-                    // name: English Name (fallback to Producer if name missing)
-                    const cleanName = n_NameEn || n_Producer || 'Unnamed Wine';
-                    // name_kr: Korean Name
-                    const cleanNameKr = n_NameKr || '';
+                    const imageUrl = getImageUrl(item.property_label_picture) || getImageUrl(item.property_main_picture);
 
                     return {
-                        id: item.id || item.Id || Math.random().toString(36).substr(2, 9),
-                        name: cleanName,
-                        name_kr: cleanNameKr,
-                        producer: n_Producer || '',
-                        vintage: Number(n_Vintage) || new Date().getFullYear(),
-                        type: n_Type || 'Red',
-                        country: n_Country || '', // Pass empty if missing to let UI handle fallback
-                        region: n_Region || '',
-                        rating: Number(n_Rating) || 0,
-                        price: Number(n_Price) || undefined,
-                        abv: n_Abv ? Number(n_Abv) : undefined,
-                        tastingDate: item.tastingDate || item.TastingDate || new Date().toISOString(),
-                        notes: extractValue(item.Notes || item.notes) || ''
+                        id: item.id || Math.random().toString(36).substr(2, 9),
+                        // Try standard camelCase keys first (user claim), fallback to property_ snake_case (debug evidence)
+                        nameEn: item.nameEn || item.property_name_en || '',
+                        nameKr: item.nameKr || item.property_name_kr || '',
+                        producer: item.producer || item.property_producer || '',
+                        vintage: Number(item.vintage || item.property_vintage) || new Date().getFullYear(),
+                        type: (item.type || item.property_type) || 'Red',
+                        country: item.country || item.property_country || '',
+                        region: item.region || item.property_region || '',
+                        rating: Number(item.rating || item.property_rating) || 0,
+                        price: Number(item.price || item.property_price) || undefined,
+                        abv: (item.abv || item.property_abv) ? Number(item.abv || item.property_abv) : undefined,
+                        date: item.date || item.property_date || new Date().toISOString(),
+                        note: item.note || item.property_note || '',
+                        imageUrl: imageUrl
                     };
                 });
 
@@ -91,7 +70,6 @@ export default function MyCellar() {
                 setWines(safeData);
             } catch (err: any) {
                 console.error('[MyCellar] Load Error:', err);
-                // Show the actual error message to the user/developer for debugging
                 setError(err.message || '와인 데이터를 불러오는데 실패했습니다.');
             } finally {
                 setLoading(false);
@@ -103,8 +81,13 @@ export default function MyCellar() {
 
     const filteredWines = useMemo(() => {
         return wines.filter((wine) => {
-            const matchesSearch = wine.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                wine.producer?.toLowerCase().includes(searchQuery.toLowerCase());
+            // Search by Korean Name, English Name, or Producer
+            const query = searchQuery.toLowerCase();
+            const matchesSearch =
+                (wine.nameKr?.toLowerCase().includes(query)) ||
+                (wine.nameEn?.toLowerCase().includes(query)) ||
+                (wine.producer?.toLowerCase().includes(query));
+
             const matchesType = selectedType === 'All' || wine.type === selectedType;
 
             return matchesSearch && matchesType;

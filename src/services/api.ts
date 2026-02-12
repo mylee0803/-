@@ -36,16 +36,23 @@ function getWebhookUrl(baseUrlOrFullUrl: string | undefined, path: string): stri
     return `${base}/webhook/${path}`;
 }
 
+// Centralized Headers Configuration
+// TODO: When migrating to Raspberry Pi (Local Network), remove 'ngrok-skip-browser-warning'
+const getCommonHeaders = () => {
+    return {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420', // Magic number to bypass ngrok warning
+    };
+};
+
 export async function submitWineEntry(data: WineSubmission): Promise<void> {
     const webhookUrl = getWebhookUrl(import.meta.env.VITE_N8N_WEBHOOK_URL, 'wine-entry');
     console.log('[API] Submitting entry to:', webhookUrl);
 
+    // Using fetch with common headers
     const response = await fetch(webhookUrl, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning page
-        },
+        headers: getCommonHeaders(),
         body: JSON.stringify(data),
     });
 
@@ -56,24 +63,39 @@ export async function submitWineEntry(data: WineSubmission): Promise<void> {
 
 export async function fetchWines(): Promise<any[]> {
     const listUrl = getWebhookUrl(import.meta.env.VITE_N8N_LIST_URL, 'get-wines') + `?t=${new Date().getTime()}`;
-    console.log('[API] Fetching wines from:', listUrl);
+    console.group('[API] Fetching Wines');
+    console.log('Target URL:', listUrl);
+    console.log('Headers:', getCommonHeaders());
+    console.groupEnd();
 
     try {
         const response = await fetch(listUrl, {
-            headers: {
-                'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning page
-            },
+            headers: getCommonHeaders(),
         });
+
+        const rawText = await response.text();
+
+        // Check for HTML response (ngrok warning or error page)
+        if (rawText.trim().startsWith('<!DOCTYPE html>') || rawText.includes('ngrok-skip-browser-warning')) {
+            console.error('[API] Server returned HTML instead of JSON. Likely an ngrok warning page or firewall issue.');
+            console.error('Raw Response Preview:', rawText.substring(0, 500));
+            throw new Error('서버 연결 방화벽 확인 필요 (HTML 응답 감지됨)');
+        }
 
         if (!response.ok) {
             throw new Error(`서버 응답 오류 (${response.status}): ${response.statusText}`);
         }
 
-        return await response.json();
+        try {
+            return JSON.parse(rawText);
+        } catch (jsonError) {
+            console.error('[API] JSON Parse Error. Raw Text:', rawText);
+            throw new Error('서버 응답 데이터 형식이 올바르지 않습니다.');
+        }
+
     } catch (error: any) {
         console.error('[API] fetchWines Error:', error);
 
-        // 네트워크 오류 (Failed to fetch) 메시지 개선
         if (error.message === 'Failed to fetch') {
             throw new Error('서버에 연결할 수 없습니다. 인터넷 설정이나 API URL 설정을 확인해주세요.');
         }

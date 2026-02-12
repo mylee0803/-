@@ -6,29 +6,29 @@ export default function FontPreview() {
 
     const fonts = [
         {
-            name: 'Pretendard (Current)',
-            fontFamily: 'font-sans', // Pretendard via Tailwind config
-            description: '현재 적용된 산세리프 폰트입니다. 깔끔하지만 차가운 느낌이 들 수 있습니다.'
+            name: 'NanumSquare (나눔스퀘어)',
+            fontFamily: "font-['NanumSquare']",
+            description: '직선적이고 모던한 제목용 폰트입니다. 가장 깔끔하고 대중적인 선택지입니다.'
+        },
+        {
+            name: 'Gmarket Sans (Gmarket Sans)',
+            fontFamily: "font-['GmarketSansMedium']",
+            description: '네모 반듯하면서도 친근한 느낌을 줍니다. 가독성이 뛰어나고 트렌디합니다.'
         },
         {
             name: 'Hahmlet (함렛)',
-            fontFamily: 'font-[Hahmlet]',
-            description: '부드러운 곡선과 직선이 조화된 현대적인 세리프 폰트입니다. 단단하면서도 우아합니다.'
-        },
-        {
-            name: 'Gowun Batang (고운바탕)',
-            fontFamily: 'font-[Gowun_Batang]',
-            description: '손글씨 느낌이 가미된 부드러운 명조체입니다. 감성적이고 따뜻한 느낌을 줍니다.'
+            fontFamily: "font-['Hahmlet']",
+            description: '단단한 느낌의 현대적인 잉크 트랩 폰트입니다. 세리프와 산세리프의 장점을 결합했습니다.'
         },
         {
             name: 'Gowun Dodum (고운돋움)',
-            fontFamily: 'font-[Gowun_Dodum]',
+            fontFamily: "font-['Gowun_Dodum']",
             description: '동글동글하고 부드러운 느낌의 돋움체입니다. 귀엽지만 가독성이 좋습니다.'
         },
         {
-            name: 'Noto Serif KR (Light)',
-            fontFamily: 'font-serif font-light',
-            description: '기존 세리프 폰트의 굵기를 줄여(Light) 세련됨을 강조한 버전입니다.'
+            name: 'Sunflower (해바라기)',
+            fontFamily: "font-['Sunflower']",
+            description: '레트로한 감성이 묻어나는 직선적인 고딕체입니다. 개성 있는 제목에 어울립니다.'
         }
     ];
 

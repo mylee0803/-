@@ -5,7 +5,8 @@ import MyCellar from './pages/MyCellar';
 import TastingNotes from './pages/TastingNotes';
 import Statistics from './pages/Statistics';
 import BucketList from './pages/BucketList';
-import AddEntry from './pages/AddEntry';
+// import AddEntry from './pages/AddEntry'; // Deprecated
+import WineWizard from './pages/WineWizard';
 import FontPreview from './pages/FontPreview';
 
 function App() {
@@ -18,9 +19,11 @@ function App() {
           <Route path="notes" element={<TastingNotes />} />
           <Route path="statistics" element={<Statistics />} />
           <Route path="bucket-list" element={<BucketList />} />
-          <Route path="add" element={<AddEntry />} />
+          {/* <Route path="add" element={<AddEntry />} /> */}
           <Route path="font-preview" element={<FontPreview />} />
         </Route>
+        {/* Wizard Route - Outside Layout (Full Screen) */}
+        <Route path="/add" element={<WineWizard />} />
       </Routes>
     </BrowserRouter>
   );

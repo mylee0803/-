@@ -10,6 +10,7 @@ interface WizardLayoutProps {
     onClose?: () => void;
     title?: string;
     previewImage?: string;
+    onStepClick?: (step: number) => void;
 }
 
 export default function WizardLayout({
@@ -19,7 +20,8 @@ export default function WizardLayout({
     onBack,
     onClose,
     title,
-    previewImage
+    previewImage,
+    onStepClick
 }: WizardLayoutProps) {
     const navigate = useNavigate();
 
@@ -74,11 +76,17 @@ export default function WizardLayout({
             </header>
 
             {/* Progress Bar */}
-            <div className="w-full h-1 bg-stone-100 shrink-0">
-                <div
-                    className="h-full bg-wine-500 transition-all duration-300 ease-out"
-                    style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-                />
+            <div className="w-full h-1 bg-stone-100 shrink-0 flex">
+                {Array.from({ length: totalSteps }, (_, i) => i + 1).map((step) => (
+                    <div
+                        key={step}
+                        className={`h-full flex-1 transition-colors duration-300 ${step <= currentStep ? 'bg-wine-500' : 'bg-stone-200'
+                            } cursor-pointer`}
+                        onClick={() => {
+                            if (onStepClick) onStepClick(step);
+                        }}
+                    />
+                ))}
             </div>
 
             {/* Main Content Area */}

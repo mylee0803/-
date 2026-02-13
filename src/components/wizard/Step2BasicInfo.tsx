@@ -1,4 +1,4 @@
-import { useState, useEffect, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import Button from '../ui/Button';
 
 
@@ -22,25 +22,13 @@ export default function Step2BasicInfo({ onNext, initialData }: Step2BasicInfoPr
         country: initialData?.country || ''
     });
 
-    const [isValid, setIsValid] = useState(false);
-
-    useEffect(() => {
-        // Validation: At least one name and valid vintage required
-        const hasName = formData.nameKr.trim().length > 0 || formData.nameEn.trim().length > 0;
-        const hasVintage = formData.vintage.trim().length === 4; // Simple 4-digit check
-
-        setIsValid(hasName && hasVintage);
-    }, [formData]);
-
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleNext = () => {
-        if (isValid) {
-            onNext(formData);
-        }
+        onNext(formData);
     };
 
     return (
@@ -123,7 +111,7 @@ export default function Step2BasicInfo({ onNext, initialData }: Step2BasicInfoPr
                     fullWidth
                     size="lg"
                     onClick={handleNext}
-                    disabled={!isValid}
+
                     className="shadow-lg shadow-wine-100"
                 >
                     다음 단계로

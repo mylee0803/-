@@ -1,13 +1,8 @@
 /**
- * Resizes an image file to a maximum width while maintaining aspect ratio,
- * and compresses it to JPEG format.
- * 
- * @param file The image file to resize
- * @param maxWidth The maximum width in pixels (default: 1024)
- * @param quality The JPEG quality between 0 and 1 (default: 0.7)
- * @returns A Promise that resolves to the data URL of the resized image
+ * Resizes an image file to a maximum dimension while maintaining aspect ratio.
+ * Returns a Base64 string of the resized image.
  */
-export const resizeImage = (file: File, maxWidth = 1024, quality = 0.7): Promise<string> => {
+export const resizeImage = (file: File, maxWidth = 800, maxHeight = 800): Promise<string> => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -19,32 +14,30 @@ export const resizeImage = (file: File, maxWidth = 1024, quality = 0.7): Promise
                 let width = img.width;
                 let height = img.height;
 
-                if (width > maxWidth) {
-                    height = (height * maxWidth) / width;
-                    width = maxWidth;
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
                 }
 
                 canvas.width = width;
                 canvas.height = height;
+
                 const ctx = canvas.getContext('2d');
-                if (!ctx) {
-                    reject(new Error('Failed to get canvas context'));
-                    return;
-                }
+                ctx?.drawImage(img, 0, 0, width, height);
 
-                ctx.drawImage(img, 0, 0, width, height);
-
-                const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                // Compress to JPEG with 0.8 quality
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
                 resolve(dataUrl);
             };
-            img.onerror = (err) => {
-                console.error('Failed to load image:', err);
-                reject(new Error('이미지를 불러오는데 실패했습니다.'));
-            };
+            img.onerror = (error) => reject(error);
         };
-        reader.onerror = (err) => {
-            console.error('FileReader failed:', err);
-            reject(err);
-        };
+        reader.onerror = (error) => reject(error);
     });
 };

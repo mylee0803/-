@@ -43,9 +43,7 @@ export default function Step1Photo({ onNext, initialPhoto }: Step1PhotoProps) {
     };
 
     const handleNext = () => {
-        if (photo) {
-            onNext(photo);
-        }
+        onNext(photo || '');
     };
 
     return (
@@ -146,7 +144,6 @@ export default function Step1Photo({ onNext, initialPhoto }: Step1PhotoProps) {
                     fullWidth
                     size="lg"
                     onClick={handleNext}
-                    disabled={!photo || isProcessing}
                     className="shadow-lg shadow-wine-100"
                 >
                     {isProcessing ? '처리 중...' : '다음 단계로'}

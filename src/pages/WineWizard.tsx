@@ -2,21 +2,29 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import WizardLayout from '../components/wizard/WizardLayout';
 import Step1Photo from '../components/wizard/Step1Photo';
+import Step2BasicInfo from '../components/wizard/Step2BasicInfo';
 
 export default function WineWizard() {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [wineData, setWineData] = useState<{
         photo?: string;
-        // extended later for other steps
+        nameKr?: string;
+        nameEn?: string;
+        vintage?: string;
+        country?: string;
     }>({});
 
     const handleStep1Next = (photoData: string) => {
         setWineData(prev => ({ ...prev, photo: photoData }));
-        // For now, since only Step 1 is implemented, we just log and maybe alert
-        console.log('Step 1 Complete. Photo data length:', photoData.length);
-        alert('1단계 완료! 다음 단계는 개발 중입니다.');
-        // setStep(2); // Uncomment when Step 2 is ready
+        setStep(2);
+    };
+
+    const handleStep2Next = (data: { nameKr: string; nameEn: string; vintage: string; country: string }) => {
+        setWineData(prev => ({ ...prev, ...data }));
+        console.log('Step 2 Complete. Data:', data);
+        alert('2단계 완료! 다음 단계는 개발 중입니다.');
+        // setStep(3); // Uncomment when Step 3 is ready
     };
 
     const handleBack = () => {
@@ -32,12 +40,15 @@ export default function WineWizard() {
             currentStep={step}
             totalSteps={4}
             onBack={handleBack}
-            title="와인 등록"
+            title={step === 1 ? "와인 등록" : "기본 정보"}
+            previewImage={step > 1 ? wineData.photo : undefined}
         >
             {step === 1 && (
                 <Step1Photo onNext={handleStep1Next} initialPhoto={wineData.photo} />
             )}
-            {/* Future steps will be added here */}
+            {step === 2 && (
+                <Step2BasicInfo onNext={handleStep2Next} initialData={wineData} />
+            )}
         </WizardLayout>
     );
 }

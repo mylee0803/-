@@ -9,6 +9,7 @@ interface WizardLayoutProps {
     onBack?: () => void;
     onClose?: () => void;
     title?: string;
+    previewImage?: string;
 }
 
 export default function WizardLayout({
@@ -17,7 +18,8 @@ export default function WizardLayout({
     totalSteps = 4,
     onBack,
     onClose,
-    title
+    title,
+    previewImage
 }: WizardLayoutProps) {
     const navigate = useNavigate();
 
@@ -49,11 +51,19 @@ export default function WizardLayout({
                     <X className="w-6 h-6" />
                 </button>
 
-                {title && (
+                {title ? (
                     <h1 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold text-stone-800">
                         {title}
                     </h1>
-                )}
+                ) : previewImage ? (
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <img
+                            src={previewImage}
+                            alt="Preview"
+                            className="h-10 w-10 object-cover rounded-full border border-stone-200"
+                        />
+                    </div>
+                ) : null}
 
                 <button
                     onClick={handleClose}

@@ -172,7 +172,9 @@ export default function WineWizard() {
                     drag="x"
                     dragConstraints={{ left: 0, right: 0 }}
                     dragElastic={1}
+                    dragListener={true}
                     dragPropagation={true}
+                    style={{ touchAction: 'pan-y' }}
                     onDragEnd={(_, { offset, velocity }) => {
                         const swipe = swipePower(offset.x, velocity.x);
 

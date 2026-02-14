@@ -69,8 +69,8 @@ export default function WineWizard() {
             previewImage={wineData.photo}
         >
             {/* Version & Debug Tag */}
-            <div className="absolute top-14 right-2 z-50 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
-                v1.0.4 | {new Date().toISOString().slice(11, 19)} | {debugLog}
+            <div className="absolute top-14 right-2 z-50 bg-green-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
+                v1.0.6 | Ref:a20b06c+ | {debugLog}
             </div>
 
             <AnimatePresence initial={false} custom={direction} mode='popLayout'>
@@ -82,26 +82,27 @@ export default function WineWizard() {
                     animate="center"
                     exit="exit"
                     transition={{
-                        x: { type: "spring", stiffness: 300, damping: 30 },
+                        x: { type: "spring", stiffness: 200, damping: 25 },
                         opacity: { duration: 0.2 }
                     }}
                     drag="x"
                     dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.5}
+                    dragElastic={0.9}
                     dragListener={true}
                     dragPropagation={true}
-                    style={{ touchAction: 'pan-y' }}
+                    style={{
+                        touchAction: 'pan-y',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none',
+                        WebkitTouchCallout: 'none'
+                    }}
                     onPointerDownCapture={(e) => {
-                        // Force capture touch to ensure drag starts
+                        // Crucial: Capture event to prevent browser default behaviors impacting drag start
                     }}
                     onDragEnd={(_, { offset, velocity }) => {
                         const swipe = swipePower(offset.x, velocity.x);
                         setDebugLog(`S:${swipe.toFixed(0)} O:${offset.x.toFixed(0)}`);
 
-                        // Enhanced sensitivity logic
-                        // If offset is very small (e.g. 1~5px) but we have significant velocity?
-                        // Or just trust the low threshold of 20px.
-                        // With touchAction='pan-y' on children, O should be normal again.
                         if (swipe < -swipeConfidenceThreshold || offset.x < -20) {
                             paginate(1);
                         } else if (swipe > swipeConfidenceThreshold || offset.x > 20) {

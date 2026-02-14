@@ -148,6 +148,9 @@ export default function WineWizard() {
         }
     };
 
+    // Debug State (Temporary) - For verifying mobile deployment
+    const [debugLog, setDebugLog] = useState<string>('Ready');
+
     return (
         <WizardLayout
             currentStep={step}
@@ -157,6 +160,11 @@ export default function WineWizard() {
             title={getTitle()}
             previewImage={wineData.photo}
         >
+            {/* Version & Debug Tag */}
+            <div className="absolute top-14 right-2 z-50 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
+                v{new Date().toISOString().slice(11, 19)} | {debugLog}
+            </div>
+
             <AnimatePresence initial={false} custom={direction} mode='popLayout'>
                 <motion.div
                     key={step}
@@ -177,6 +185,7 @@ export default function WineWizard() {
                     style={{ touchAction: 'pan-y' }}
                     onDragEnd={(_, { offset, velocity }) => {
                         const swipe = swipePower(offset.x, velocity.x);
+                        setDebugLog(`S:${swipe.toFixed(0)} O:${offset.x.toFixed(0)}`);
 
                         if (swipe < -swipeConfidenceThreshold || offset.x < -50) {
                             paginate(1);

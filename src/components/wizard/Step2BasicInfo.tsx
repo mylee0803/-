@@ -113,20 +113,18 @@ export default function Step2BasicInfo({ onNext, initialData, updateData }: { on
                     />
                 </div>
             </div>
-        </div>
-            </div >
 
-        <div className="pt-6 mt-auto">
-            <Button
-                fullWidth
-                size="lg"
-                onClick={onNext}
+            <div className="pt-6 mt-auto">
+                <Button
+                    fullWidth
+                    size="lg"
+                    onClick={onNext}
 
-                className="shadow-lg shadow-wine-100"
-            >
-                다음 단계로
-            </Button>
+                    className="shadow-lg shadow-wine-100"
+                >
+                    다음 단계로
+                </Button>
+            </div>
         </div>
-        </div >
     );
 }

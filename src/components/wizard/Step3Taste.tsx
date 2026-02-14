@@ -66,7 +66,6 @@ export default function Step3Taste({ onNext, initialData, updateData }: { onNext
                 step="1"
                 value={data[key as keyof TasteData] as number}
                 onChange={(e) => handleSliderChange(key, parseInt(e.target.value))}
-                onPointerDownCapture={(e) => e.stopPropagation()}
                 className="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-wine-600"
             />
             <div className="flex justify-between text-xs text-stone-400 font-serif">
@@ -85,7 +84,7 @@ export default function Step3Taste({ onNext, initialData, updateData }: { onNext
                 느껴지는대로 자유롭게 기록해보세요.
             </p>
 
-            <div className="flex-1 overflow-y-auto space-y-8 pr-2">
+            <div className="flex-1 overflow-y-auto space-y-8 pr-2" style={{ touchAction: 'pan-y' }}>
                 {/* Taste Sliders */}
                 <div className="space-y-6 bg-white p-4 rounded-xl border border-stone-100 shadow-sm">
                     {renderSlider('바디감 (Body)', 'body')}

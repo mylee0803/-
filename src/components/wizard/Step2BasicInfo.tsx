@@ -35,7 +35,7 @@ export default function Step2BasicInfo({ onNext, initialData, updateData }: { on
                 와인의 이름과 빈티지를 확인해주세요.
             </p>
 
-            <div className="space-y-6 flex-1 overflow-y-auto">
+            <div className="space-y-6 flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
                 {/* Korean Name */}
                 <div>
                     <label className="block text-sm font-bold text-stone-700 mb-2" style={{ fontFamily: 'Pretendard, sans-serif' }}>

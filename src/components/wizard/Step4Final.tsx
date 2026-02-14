@@ -41,7 +41,7 @@ export default function Step4Final({ onSubmit, initialData, isSubmitting, update
                 가격과 평점, 개인적인 기록을 남겨주세요.
             </p>
 
-            <div className="flex-1 overflow-y-auto space-y-6">
+            <div className="flex-1 overflow-y-auto space-y-6" style={{ touchAction: 'pan-y' }}>
 
                 {/* Rating */}
                 <div className="bg-white p-6 rounded-xl border border-stone-100 shadow-sm flex flex-col items-center">

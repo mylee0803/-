@@ -161,8 +161,8 @@ export default function WineWizard() {
             previewImage={wineData.photo}
         >
             {/* Version & Debug Tag */}
-            <div className="absolute top-14 right-2 z-50 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
-                v{new Date().toISOString().slice(11, 19)} | {debugLog}
+            <div className="absolute top-14 right-2 z-50 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
+                v1.0.1 | {new Date().toISOString().slice(11, 19)} | {debugLog}
             </div>
 
             <AnimatePresence initial={false} custom={direction} mode='popLayout'>

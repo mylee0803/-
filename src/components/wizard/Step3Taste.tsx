@@ -9,10 +9,7 @@ interface TasteData {
     aromas: string[];
 }
 
-interface Step3TasteProps {
-    onNext: (data: TasteData) => void;
-    initialData?: Partial<TasteData>;
-}
+
 
 const AROMA_OPTIONS = [
     { label: '체리', icon: '🍒' },
@@ -32,7 +29,7 @@ const AROMA_OPTIONS = [
     { label: '흙', icon: '🪨' },
 ];
 
-export default function Step3Taste({ onNext, initialData }: Step3TasteProps) {
+export default function Step3Taste({ onNext, initialData, updateData }: { onNext: () => void, initialData?: any, updateData: (data: any) => void }) {
     const [data, setData] = useState<TasteData>({
         body: initialData?.body || 3,
         tannin: initialData?.tannin || 3,
@@ -42,16 +39,18 @@ export default function Step3Taste({ onNext, initialData }: Step3TasteProps) {
     });
 
     const handleSliderChange = (key: keyof TasteData, value: number) => {
-        setData(prev => ({ ...prev, [key]: value }));
+        const newData = { ...data, [key]: value };
+        setData(newData);
+        updateData(newData);
     };
 
     const toggleAroma = (aroma: string) => {
-        setData(prev => {
-            const newAromas = prev.aromas.includes(aroma)
-                ? prev.aromas.filter(a => a !== aroma)
-                : [...prev.aromas, aroma];
-            return { ...prev, aromas: newAromas };
-        });
+        const newAromas = data.aromas.includes(aroma)
+            ? data.aromas.filter(a => a !== aroma)
+            : [...data.aromas, aroma];
+        const newData = { ...data, aromas: newAromas };
+        setData(newData);
+        updateData(newData);
     };
 
     const renderSlider = (label: string, key: keyof TasteData) => (
@@ -67,6 +66,7 @@ export default function Step3Taste({ onNext, initialData }: Step3TasteProps) {
                 step="1"
                 value={data[key as keyof TasteData] as number}
                 onChange={(e) => handleSliderChange(key, parseInt(e.target.value))}
+                onPointerDownCapture={(e) => e.stopPropagation()}
                 className="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-wine-600"
             />
             <div className="flex justify-between text-xs text-stone-400 font-serif">
@@ -122,7 +122,7 @@ export default function Step3Taste({ onNext, initialData }: Step3TasteProps) {
                 <Button
                     fullWidth
                     size="lg"
-                    onClick={() => onNext(data)}
+                    onClick={onNext}
                     className="shadow-lg shadow-wine-100"
                 >
                     다음 단계로

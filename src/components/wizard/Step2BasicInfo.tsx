@@ -9,12 +9,7 @@ interface BasicInfoData {
     country: string;
 }
 
-interface Step2BasicInfoProps {
-    onNext: (data: BasicInfoData) => void;
-    initialData?: Partial<BasicInfoData>;
-}
-
-export default function Step2BasicInfo({ onNext, initialData }: Step2BasicInfoProps) {
+export default function Step2BasicInfo({ onNext, initialData, updateData }: { onNext: () => void, initialData?: any, updateData: (data: any) => void }) {
     const [formData, setFormData] = useState<BasicInfoData>({
         nameKr: initialData?.nameKr || '',
         nameEn: initialData?.nameEn || '',
@@ -24,11 +19,9 @@ export default function Step2BasicInfo({ onNext, initialData }: Step2BasicInfoPr
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleNext = () => {
-        onNext(formData);
+        const newData = { ...formData, [name]: value };
+        setFormData(newData);
+        updateData(newData);
     };
 
     return (
@@ -110,7 +103,7 @@ export default function Step2BasicInfo({ onNext, initialData }: Step2BasicInfoPr
                 <Button
                     fullWidth
                     size="lg"
-                    onClick={handleNext}
+                    onClick={onNext}
 
                     className="shadow-lg shadow-wine-100"
                 >

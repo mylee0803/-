@@ -90,7 +90,7 @@ export default function WizardLayout({
             </div>
 
             {/* Main Content Area */}
-            <main className="flex-1 overflow-y-auto w-full max-w-md mx-auto relative">
+            <main className="flex-1 w-full max-w-md mx-auto relative flex flex-col min-h-0 overflow-x-hidden">
                 {children}
             </main>
         </div>

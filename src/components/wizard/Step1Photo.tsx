@@ -3,12 +3,7 @@ import { Camera, Image as ImageIcon } from 'lucide-react';
 import { resizeImage } from '../../utils/imageUtils';
 import Button from '../ui/Button';
 
-interface Step1PhotoProps {
-    onNext: (photoData: string) => void;
-    initialPhoto?: string;
-}
-
-export default function Step1Photo({ onNext, initialPhoto }: Step1PhotoProps) {
+export default function Step1Photo({ onNext, initialPhoto, updateData }: { onNext: () => void, initialPhoto?: string, updateData: (data: any) => void }) {
     const [photo, setPhoto] = useState<string | null>(initialPhoto || null);
     const [isProcessing, setIsProcessing] = useState(false);
 
@@ -24,6 +19,7 @@ export default function Step1Photo({ onNext, initialPhoto }: Step1PhotoProps) {
             setIsProcessing(true);
             const resizedImage = await resizeImage(file);
             setPhoto(resizedImage);
+            updateData({ photo: resizedImage });
         } catch (error) {
             console.error('Image processing failed:', error);
             alert('사진을 처리하는 중 오류가 발생했습니다.');
@@ -40,10 +36,6 @@ export default function Step1Photo({ onNext, initialPhoto }: Step1PhotoProps) {
 
     const handleGalleryClick = () => {
         galleryInputRef.current?.click();
-    };
-
-    const handleNext = () => {
-        onNext(photo || '');
     };
 
     return (
@@ -143,7 +135,7 @@ export default function Step1Photo({ onNext, initialPhoto }: Step1PhotoProps) {
                 <Button
                     fullWidth
                     size="lg"
-                    onClick={handleNext}
+                    onClick={onNext}
                     className="shadow-lg shadow-wine-100"
                 >
                     {isProcessing ? '처리 중...' : '다음 단계로'}

@@ -8,13 +8,9 @@ interface FinalData {
     rating: number;
 }
 
-interface Step4FinalProps {
-    onSubmit: (data: FinalData) => void;
-    initialData?: Partial<FinalData>;
-    isSubmitting: boolean;
-}
 
-export default function Step4Final({ onSubmit, initialData, isSubmitting }: Step4FinalProps) {
+
+export default function Step4Final({ onSubmit, initialData, isSubmitting, updateData }: { onSubmit: () => void, initialData?: any, isSubmitting: boolean, updateData: (data: any) => void }) {
     const [formData, setFormData] = useState<FinalData>({
         date: initialData?.date || new Date().toISOString().split('T')[0],
         price: initialData?.price || '',
@@ -24,12 +20,16 @@ export default function Step4Final({ onSubmit, initialData, isSubmitting }: Step
 
     // Rating star logic
     const handleRating = (value: number) => {
-        setFormData(prev => ({ ...prev, rating: value }));
+        const newData = { ...formData, rating: value };
+        setFormData(newData);
+        updateData(newData);
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        const newData = { ...formData, [name]: value };
+        setFormData(newData);
+        updateData(newData);
     };
 
     return (
@@ -108,7 +108,7 @@ export default function Step4Final({ onSubmit, initialData, isSubmitting }: Step
                 <Button
                     fullWidth
                     size="lg"
-                    onClick={() => onSubmit(formData)}
+                    onClick={onSubmit}
                     disabled={isSubmitting}
                     className="shadow-lg shadow-wine-100 bg-wine-600 hover:bg-wine-700"
                 >

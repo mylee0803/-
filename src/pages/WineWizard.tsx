@@ -48,7 +48,7 @@ const variants = {
     })
 };
 
-const swipeConfidenceThreshold = 3000;
+const swipeConfidenceThreshold = 1000;
 const swipePower = (offset: number, velocity: number) => {
     return Math.abs(offset) * velocity;
 };
@@ -157,7 +157,7 @@ export default function WineWizard() {
             title={getTitle()}
             previewImage={wineData.photo}
         >
-            <AnimatePresence initial={false} custom={direction} mode='wait'>
+            <AnimatePresence initial={false} custom={direction} mode='popLayout'>
                 <motion.div
                     key={step}
                     custom={direction}
@@ -172,12 +172,13 @@ export default function WineWizard() {
                     drag="x"
                     dragConstraints={{ left: 0, right: 0 }}
                     dragElastic={1}
+                    dragPropagation={true}
                     onDragEnd={(_, { offset, velocity }) => {
                         const swipe = swipePower(offset.x, velocity.x);
 
-                        if (swipe < -swipeConfidenceThreshold || offset.x < -100) {
+                        if (swipe < -swipeConfidenceThreshold || offset.x < -50) {
                             paginate(1);
-                        } else if (swipe > swipeConfidenceThreshold || offset.x > 100) {
+                        } else if (swipe > swipeConfidenceThreshold || offset.x > 50) {
                             paginate(-1);
                         }
                     }}

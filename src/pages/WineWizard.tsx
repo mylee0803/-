@@ -47,7 +47,7 @@ const variants = {
     })
 };
 
-const swipeConfidenceThreshold = 10000;
+const swipeConfidenceThreshold = 3000;
 const swipePower = (offset: number, velocity: number) => {
     return Math.abs(offset) * velocity;
 };
@@ -173,9 +173,9 @@ export default function WineWizard() {
                     onDragEnd={(_, { offset, velocity }) => {
                         const swipe = swipePower(offset.x, velocity.x);
 
-                        if (swipe < -swipeConfidenceThreshold) {
+                        if (swipe < -swipeConfidenceThreshold || offset.x < -100) {
                             paginate(1);
-                        } else if (swipe > swipeConfidenceThreshold) {
+                        } else if (swipe > swipeConfidenceThreshold || offset.x > 100) {
                             paginate(-1);
                         }
                     }}

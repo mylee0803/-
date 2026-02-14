@@ -10,6 +10,7 @@ export interface WineSubmission {
     type: WineType;
     region?: string;
     country?: string;
+    variety?: string;
     abv?: number | null;
     price?: number;
     rating: number;

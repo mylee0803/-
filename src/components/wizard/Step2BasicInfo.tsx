@@ -7,6 +7,7 @@ interface BasicInfoData {
     nameEn: string;
     vintage: string;
     country: string;
+    variety: string;
 }
 
 export default function Step2BasicInfo({ onNext, initialData, updateData }: { onNext: () => void, initialData?: any, updateData: (data: any) => void }) {
@@ -14,7 +15,8 @@ export default function Step2BasicInfo({ onNext, initialData, updateData }: { on
         nameKr: initialData?.nameKr || '',
         nameEn: initialData?.nameEn || '',
         vintage: initialData?.vintage || '',
-        country: initialData?.country || ''
+        country: initialData?.country || '',
+        variety: initialData?.variety || ''
     });
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +38,7 @@ export default function Step2BasicInfo({ onNext, initialData, updateData }: { on
             <div className="space-y-6 flex-1 overflow-y-auto">
                 {/* Korean Name */}
                 <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-2">
+                    <label className="block text-sm font-bold text-stone-700 mb-2" style={{ fontFamily: 'Pretendard, sans-serif' }}>
                         와인명 (한글) <span className="text-wine-500">*</span>
                     </label>
                     <input
@@ -52,7 +54,7 @@ export default function Step2BasicInfo({ onNext, initialData, updateData }: { on
 
                 {/* English Name */}
                 <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-2">
+                    <label className="block text-sm font-bold text-stone-700 mb-2" style={{ fontFamily: 'Pretendard, sans-serif' }}>
                         와인명 (영문)
                     </label>
                     <input
@@ -65,51 +67,66 @@ export default function Step2BasicInfo({ onNext, initialData, updateData }: { on
                     />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                    {/* Vintage */}
-                    <div>
-                        <label className="block text-sm font-medium text-stone-700 mb-2">
-                            빈티지 <span className="text-wine-500">*</span>
-                        </label>
-                        <input
-                            type="number"
-                            name="vintage"
-                            value={formData.vintage}
-                            onChange={handleChange}
-                            placeholder="YYYY"
-                            className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-wine-500 focus:border-transparent outline-none transition-all text-center text-lg"
-                            inputMode="numeric"
-                        />
-                    </div>
+                {/* Vintage */}
+                <div>
+                    <label className="block text-sm font-bold text-stone-700 mb-2" style={{ fontFamily: 'Pretendard, sans-serif' }}>
+                        빈티지 <span className="text-wine-500">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        name="vintage"
+                        value={formData.vintage}
+                        onChange={handleChange}
+                        placeholder="YYYY"
+                        className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-wine-500 focus:border-transparent outline-none transition-all text-center text-lg font-serif"
+                        inputMode="numeric"
+                    />
+                </div>
 
-                    {/* Country */}
-                    <div>
-                        <label className="block text-sm font-medium text-stone-700 mb-2">
-                            국가
-                        </label>
-                        <input
-                            type="text"
-                            name="country"
-                            value={formData.country}
-                            onChange={handleChange}
-                            placeholder="예: 프랑스"
-                            className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-wine-500 focus:border-transparent outline-none transition-all text-center text-lg"
-                        />
-                    </div>
+                {/* Country */}
+                <div>
+                    <label className="block text-sm font-bold text-stone-700 mb-2" style={{ fontFamily: 'Pretendard, sans-serif' }}>
+                        국가
+                    </label>
+                    <input
+                        type="text"
+                        name="country"
+                        value={formData.country}
+                        onChange={handleChange}
+                        placeholder="예: 프랑스"
+                        className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-wine-500 focus:border-transparent outline-none transition-all text-center text-lg font-serif"
+                    />
+                </div>
+
+                {/* Variety */}
+                <div className="col-span-2">
+                    <label className="block text-sm font-bold text-stone-700 mb-2" style={{ fontFamily: 'Pretendard, sans-serif' }}>
+                        품종 (Variety)
+                    </label>
+                    <input
+                        type="text"
+                        name="variety"
+                        value={formData.variety}
+                        onChange={handleChange}
+                        placeholder="예: Cabernet Sauvignon"
+                        className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-wine-500 focus:border-transparent outline-none transition-all text-lg font-serif placeholder:font-sans placeholder:text-stone-300"
+                    />
                 </div>
             </div>
-
-            <div className="pt-6 mt-auto">
-                <Button
-                    fullWidth
-                    size="lg"
-                    onClick={onNext}
-
-                    className="shadow-lg shadow-wine-100"
-                >
-                    다음 단계로
-                </Button>
-            </div>
         </div>
+            </div >
+
+        <div className="pt-6 mt-auto">
+            <Button
+                fullWidth
+                size="lg"
+                onClick={onNext}
+
+                className="shadow-lg shadow-wine-100"
+            >
+                다음 단계로
+            </Button>
+        </div>
+        </div >
     );
 }

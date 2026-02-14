@@ -15,4 +15,5 @@ export interface Wine {
     date: string; // Was tastingDate
     note?: string; // Was notes
     imageUrl?: string;
+    variety?: string;
 }

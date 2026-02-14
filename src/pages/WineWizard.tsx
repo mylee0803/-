@@ -17,6 +17,7 @@ interface WineWizardData {
     nameEn?: string;
     vintage?: string;
     country?: string;
+    variety?: string;
     // Step 3
     body?: number;
     tannin?: number;
@@ -104,6 +105,7 @@ export default function WineWizard() {
                 vintage: parseInt(wineData.vintage || '0') || undefined,
                 type: 'Red',
                 country: wineData.country,
+                variety: wineData.variety,
                 price: parseFloat(wineData.price || '0'),
                 rating: wineData.rating || 0,
                 date: wineData.date || new Date().toISOString().split('T')[0],

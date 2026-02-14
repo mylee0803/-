@@ -45,6 +45,7 @@ export default function MyCellar() {
                         vintage: Number(item.vintage || item.property_vintage) || new Date().getFullYear(),
                         type: (item.type || item.property_type) || 'Red',
                         country: item.country || item.property_country || '',
+                        variety: (item.variety?.rich_text?.[0]?.plain_text || item.properties?.variety?.rich_text?.[0]?.plain_text) || '',
                         region: item.region || item.property_region || '',
                         rating: Number(item.rating || item.property_rating) || 0,
                         price: Number(item.price || item.property_price) || undefined,

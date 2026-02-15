@@ -161,8 +161,8 @@ export default function WineWizard() {
             previewImage={wineData.photo}
         >
             {/* Version & Debug Tag */}
-            <div className="absolute top-14 right-2 z-50 bg-green-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
-                v1.0.8 | Target:Prod | {debugLog}
+            <div className="absolute top-14 right-2 z-50 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
+                v1.3.0 | PWA Update | {debugLog}
             </div>
 
             <AnimatePresence initial={false} custom={direction} mode='popLayout'>
@@ -179,26 +179,30 @@ export default function WineWizard() {
                     }}
                     drag="x"
                     dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.9}
+                    dragElastic={0.7} // Reduced from 0.9 for better threshold feel
+                    dragDirectionLock={true} // Prevents accidental diagonals
                     dragListener={true}
-                    dragPropagation={true}
+                    dragPropagation={true} // Crucial for input interaction
                     style={{
-                        touchAction: 'pan-y',
+                        touchAction: 'pan-y', // Let browser handle vertical, Framer handle horizontal
                         userSelect: 'none',
                         WebkitUserSelect: 'none',
                         WebkitTouchCallout: 'none'
                     }}
-                    onPointerDownCapture={() => {
+                    onPointerDownCapture={(e) => {
                         // Crucial: Capture event to prevent browser default behaviors impacting drag start
+                        // But don't preventDefault unconditionally as it breaks inputs
                     }}
                     onDragEnd={(_, { offset, velocity }) => {
                         const swipe = swipePower(offset.x, velocity.x);
                         setDebugLog(`S:${swipe.toFixed(0)} O:${offset.x.toFixed(0)}`);
 
-                        // Ultra-sensitive trigger
-                        if (swipe < -swipeConfidenceThreshold || offset.x < -20) {
+                        // Increased threshold (20 -> 50) to ignore small drags while typing
+                        const threshold = 50;
+
+                        if (swipe < -swipeConfidenceThreshold || offset.x < -threshold) {
                             paginate(1);
-                        } else if (swipe > swipeConfidenceThreshold || offset.x > 20) {
+                        } else if (swipe > swipeConfidenceThreshold || offset.x > threshold) {
                             paginate(-1);
                         }
                     }}

@@ -9,9 +9,12 @@ import BucketList from './pages/BucketList';
 import WineWizard from './pages/WineWizard';
 import FontPreview from './pages/FontPreview';
 
+import ReloadPrompt from './components/PWA/ReloadPrompt';
+
 function App() {
   return (
     <BrowserRouter>
+      <ReloadPrompt />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

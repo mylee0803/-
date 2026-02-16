@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useDragControls, PanInfo } from 'framer-motion';
 
 import WizardLayout from '../components/wizard/WizardLayout';
 import Step1Photo from '../components/wizard/Step1Photo';
@@ -151,6 +151,8 @@ export default function WineWizard() {
     // Debug State (Temporary) - For verifying mobile deployment
     const [debugLog, setDebugLog] = useState<string>('Ready');
 
+    const dragControls = useDragControls();
+
     return (
         <WizardLayout
             currentStep={step}
@@ -162,7 +164,7 @@ export default function WineWizard() {
         >
             {/* Version & Debug Tag */}
             <div className="absolute top-14 right-2 z-50 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
-                v1.3.2 | PWA Disabled | {debugLog}
+                v1.3.4 | PWA Enabled | {debugLog}
             </div>
 
             <AnimatePresence initial={false} custom={direction} mode='popLayout'>
@@ -178,26 +180,23 @@ export default function WineWizard() {
                         opacity: { duration: 0.2 }
                     }}
                     drag="x"
+                    dragControls={dragControls}
                     dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.7} // Reduced from 0.9 for better threshold feel
-                    dragDirectionLock={true} // Prevents accidental diagonals
-                    dragListener={true}
-                    dragPropagation={true} // Crucial for input interaction
+                    dragElastic={0.7}
+                    dragDirectionLock={true}
+                    dragListener={false} // Manually triggered via onPointerDown
                     style={{
-                        touchAction: 'pan-y', // Let browser handle vertical, Framer handle horizontal
+                        touchAction: 'pan-y',
                         userSelect: 'none',
                         WebkitUserSelect: 'none',
                         WebkitTouchCallout: 'none'
                     }}
-                    onPointerDownCapture={() => {
-                        // Crucial: Capture event to prevent browser default behaviors impacting drag start
-                        // But don't preventDefault unconditionally as it breaks inputs
+                    onPointerDown={(e) => {
+                        dragControls.start(e);
                     }}
-                    onDragEnd={(_, { offset, velocity }) => {
+                    onDragEnd={(_, { offset, velocity }: PanInfo) => {
                         const swipe = swipePower(offset.x, velocity.x);
                         setDebugLog(`S:${swipe.toFixed(0)} O:${offset.x.toFixed(0)}`);
-
-                        // Increased threshold (20 -> 50) to ignore small drags while typing
                         const threshold = 50;
 
                         if (swipe < -swipeConfidenceThreshold || offset.x < -threshold) {

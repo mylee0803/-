@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence, useDragControls, PanInfo } from 'framer-motion';
+import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 
 import WizardLayout from '../components/wizard/WizardLayout';
 import Step1Photo from '../components/wizard/Step1Photo';
@@ -164,7 +164,7 @@ export default function WineWizard() {
         >
             {/* Version & Debug Tag */}
             <div className="absolute top-14 right-2 z-50 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
-                v1.3.4 | PWA Enabled | {debugLog}
+                v1.3.5 | PWA Enabled | {debugLog}
             </div>
 
             <AnimatePresence initial={false} custom={direction} mode='popLayout'>
@@ -194,7 +194,7 @@ export default function WineWizard() {
                     onPointerDown={(e) => {
                         dragControls.start(e);
                     }}
-                    onDragEnd={(_, { offset, velocity }: PanInfo) => {
+                    onDragEnd={(_, { offset, velocity }) => {
                         const swipe = swipePower(offset.x, velocity.x);
                         setDebugLog(`S:${swipe.toFixed(0)} O:${offset.x.toFixed(0)}`);
                         const threshold = 50;

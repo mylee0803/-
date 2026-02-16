@@ -3,19 +3,4 @@ declare module 'swiper/css/navigation';
 declare module 'swiper/css/pagination';
 declare module 'swiper/css/scrollbar';
 
-declare module 'virtual:pwa-register/react' {
-    export interface RegisterSWOptions {
-        immediate?: boolean
-        onNeedRefresh?: () => void
-        onOfflineReady?: () => void
-        onRegistered?: (registration: ServiceWorkerRegistration | undefined) => void
-        onRegisterError?: (error: any) => void
-        onRegisteredSW?: (swUrl: string, registration: ServiceWorkerRegistration | undefined) => void
-    }
 
-    export function useRegisterSW(options?: RegisterSWOptions): {
-        needRefresh: [boolean, (needRefresh: boolean) => void]
-        offlineReady: [boolean, (offlineReady: boolean) => void]
-        updateServiceWorker: (reloadPage?: boolean) => Promise<void>
-    }
-}

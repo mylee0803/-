@@ -15,6 +15,13 @@ export interface WineSubmission {
     rating: number;
     date: string;
     note?: string;
+    body?: number;
+    purchasedAt?: string;
+    tannin?: number;
+    acidity?: number;
+    sweetness?: number;
+    aromas?: string[];
+    image?: string;
 }
 
 const getCommonHeaders = () => ({

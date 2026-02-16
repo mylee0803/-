@@ -162,7 +162,7 @@ export default function WineWizard() {
         >
             {/* Version & Debug Tag */}
             <div className="absolute top-14 right-2 z-50 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
-                v1.3.0 | PWA Update | {debugLog}
+                v1.3.2 | PWA Disabled | {debugLog}
             </div>
 
             <AnimatePresence initial={false} custom={direction} mode='popLayout'>
@@ -189,7 +189,7 @@ export default function WineWizard() {
                         WebkitUserSelect: 'none',
                         WebkitTouchCallout: 'none'
                     }}
-                    onPointerDownCapture={(e) => {
+                    onPointerDownCapture={() => {
                         // Crucial: Capture event to prevent browser default behaviors impacting drag start
                         // But don't preventDefault unconditionally as it breaks inputs
                     }}

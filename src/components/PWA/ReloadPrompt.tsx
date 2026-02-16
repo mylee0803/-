@@ -7,7 +7,7 @@ export default function ReloadPrompt() {
         needRefresh: [needRefresh, setNeedRefresh],
         updateServiceWorker,
     } = useRegisterSW({
-        onRegisteredSW(swUrl, r) {
+        onRegisteredSW(swUrl: string, r: ServiceWorkerRegistration | undefined) {
             console.log(`Service Worker at: ${swUrl}`);
             // Check for updates every hour
             if (r) {
@@ -16,7 +16,7 @@ export default function ReloadPrompt() {
                 }, 60 * 60 * 1000);
             }
         },
-        onRegisterError(error) {
+        onRegisterError(error: any) {
             console.log('SW registration error', error);
         },
     });

@@ -13,7 +13,7 @@ export default defineConfig({
         clientsClaim: true,
         skipWaiting: false // Configured for manual update flow
       },
-      // includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
         name: '와인 다이어리 (Wine Diary) v1.1',
         short_name: 'Wine Diary',

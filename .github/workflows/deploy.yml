@@ -1,0 +1,23 @@
+name: Wine Diary Auto Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Restart PM2
+        # wine-ui라는 이름으로 실행 중이면 재시작, 없으면 새로 시작
+        run: pm2 restart wine-ui || pm2 start "serve -s dist -p 8000" --name "wine-ui"

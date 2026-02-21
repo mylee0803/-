@@ -9,19 +9,22 @@ import Step3Taste from '../components/wizard/Step3Taste';
 import Step4Final from '../components/wizard/Step4Final';
 import { submitWineEntry, type WineSubmission } from '../services/api';
 
-// --- 1. 타입 정의 및 애니메이션 설정 (상수) ---
 interface WineWizardData {
+    // Step 1
     photo?: string;
+    // Step 2
     nameKr?: string;
     nameEn?: string;
     vintage?: string;
     country?: string;
     variety?: string;
+    // Step 3
     body?: number;
     tannin?: number;
     acidity?: number;
     sweetness?: number;
     aromas?: string[];
+    // Step 4
     date?: string;
     price?: string;
     note?: string;
@@ -33,7 +36,11 @@ const variants = {
         x: direction > 0 ? 1000 : -1000,
         opacity: 0
     }),
-    center: { zIndex: 1, x: 0, opacity: 1 },
+    center: {
+        zIndex: 1,
+        x: 0,
+        opacity: 1
+    },
     exit: (direction: number) => ({
         zIndex: 0,
         x: direction < 0 ? 1000 : -1000,
@@ -42,33 +49,32 @@ const variants = {
 };
 
 const swipeConfidenceThreshold = 200;
-const swipePower = (offset: number, velocity: number) => Math.abs(offset) * velocity;
-const STEP_TITLES: Record<number, string> = {
-    1: "와인 등록", 2: "기본 정보", 3: "맛과 향", 4: "최종 기록"
+const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
 };
 
-// --- 2. 메인 컴포넌트 ---
 export default function WineWizard() {
     const navigate = useNavigate();
-    const dragControls = useDragControls();
-
     const [step, setStep] = useState(1);
     const [direction, setDirection] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [debugLog, setDebugLog] = useState<string>('Ready');
 
+    // Consolidated Data State
     const [wineData, setWineData] = useState<WineWizardData>({
-        body: 3, tannin: 3, acidity: 3, sweetness: 3,
-        aromas: [], rating: 0,
+        body: 3,
+        tannin: 3,
+        acidity: 3,
+        sweetness: 3,
+        aromas: [],
+        rating: 0,
         date: new Date().toISOString().split('T')[0]
     });
 
-    // 데이터 업데이트 핸들러
+    // Real-time data sync handler
     const updateData = (data: Partial<WineWizardData>) => {
         setWineData(prev => ({ ...prev, ...data }));
     };
 
-    // 페이지 이동 로직
     const paginate = (newDirection: number) => {
         const nextStep = step + newDirection;
         if (nextStep < 1 || nextStep > 4) return;
@@ -76,13 +82,14 @@ export default function WineWizard() {
         setStep(nextStep);
     };
 
+    // For direct jumps (progress bar)
     const jumpToStep = (targetStep: number) => {
         setDirection(targetStep > step ? 1 : -1);
         setStep(targetStep);
     };
 
-    // 데이터 제출 로직 (깔끔하게 정리)
-    const handleFinalSubmit = async () => {
+    const handleStep4Submit = async () => {
+        // Basic Validation
         if (!wineData.nameKr && !wineData.nameEn) {
             alert('와인 이름(한글 또는 영문)은 필수입니다. 2단계에서 입력해주세요.');
             jumpToStep(2);
@@ -91,6 +98,7 @@ export default function WineWizard() {
 
         try {
             setIsSubmitting(true);
+
             const submission: WineSubmission = {
                 nameEn: wineData.nameEn || wineData.nameKr || 'Unknown Wine',
                 nameKr: wineData.nameKr,
@@ -113,6 +121,7 @@ export default function WineWizard() {
             await submitWineEntry(submission);
             alert('와인이 성공적으로 등록되었습니다!');
             navigate('/cellar');
+
         } catch (error: any) {
             console.error('Submission failed:', error);
             alert(`등록 실패: ${error.message}`);
@@ -121,31 +130,41 @@ export default function WineWizard() {
         }
     };
 
-    // 단계별 화면 렌더링 (가독성 핵심!)
-    const renderStepContent = () => {
-        const commonProps = { updateData, onNext: () => paginate(1) };
-
-        switch (step) {
-            case 1: return <Step1Photo initialPhoto={wineData.photo} {...commonProps} />;
-            case 2: return <Step2BasicInfo initialData={wineData} {...commonProps} />;
-            case 3: return <Step3Taste initialData={wineData} {...commonProps} />;
-            case 4: return <Step4Final initialData={wineData} isSubmitting={isSubmitting} onSubmit={handleFinalSubmit} updateData={updateData} />;
-            default: return null;
+    const handleBack = () => {
+        if (step > 1) {
+            paginate(-1);
+        } else {
+            navigate(-1);
         }
     };
+
+    const getTitle = () => {
+        switch (step) {
+            case 1: return "와인 등록";
+            case 2: return "기본 정보";
+            case 3: return "맛과 향";
+            case 4: return "최종 기록";
+            default: return "와인 등록";
+        }
+    };
+
+    // Debug State (Temporary) - For verifying mobile deployment
+    const [debugLog, setDebugLog] = useState<string>('Ready');
+
+    const dragControls = useDragControls();
 
     return (
         <WizardLayout
             currentStep={step}
             totalSteps={4}
-            onBack={() => step > 1 ? paginate(-1) : navigate(-1)}
+            onBack={handleBack}
             onStepClick={jumpToStep}
-            title={STEP_TITLES[step]}
+            title={getTitle()}
             previewImage={wineData.photo}
         >
-            {/* 버전 태그 (개발 모드에서만 강조) */}
-            <div className="absolute top-14 right-2 z-50 bg-stone-800/80 text-white text-[10px] px-1.5 py-0.5 rounded font-mono pointer-events-none">
-                v1.4.0 | {debugLog}
+            {/* Version & Debug Tag */}
+            <div className="absolute top-14 right-2 z-50 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-90 pointer-events-none font-mono">
+                v1.3.5 | PWA Enabled | {debugLog}
             </div>
 
             <AnimatePresence initial={false} custom={direction} mode='popLayout'>
@@ -164,18 +183,42 @@ export default function WineWizard() {
                     dragControls={dragControls}
                     dragConstraints={{ left: 0, right: 0 }}
                     dragElastic={0.7}
-                    dragListener={false}
-                    onPointerDown={(e) => dragControls.start(e)}
+                    dragDirectionLock={true}
+                    dragListener={false} // Manually triggered via onPointerDown
+                    style={{
+                        touchAction: 'pan-y',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none',
+                        WebkitTouchCallout: 'none'
+                    }}
+                    onPointerDown={(e) => {
+                        dragControls.start(e);
+                    }}
                     onDragEnd={(_, { offset, velocity }) => {
                         const swipe = swipePower(offset.x, velocity.x);
                         setDebugLog(`S:${swipe.toFixed(0)} O:${offset.x.toFixed(0)}`);
-                        if (swipe < -swipeConfidenceThreshold || offset.x < -50) paginate(1);
-                        else if (swipe > swipeConfidenceThreshold || offset.x > 50) paginate(-1);
+                        const threshold = 50;
+
+                        if (swipe < -swipeConfidenceThreshold || offset.x < -threshold) {
+                            paginate(1);
+                        } else if (swipe > swipeConfidenceThreshold || offset.x > threshold) {
+                            paginate(-1);
+                        }
                     }}
-                    className="absolute inset-0 overflow-y-auto bg-stone-50"
-                    style={{ touchAction: 'pan-y' }}
+                    className="absolute top-0 left-0 w-full h-full overflow-y-auto bg-stone-50"
                 >
-                    {renderStepContent()}
+                    {step === 1 && (
+                        <Step1Photo onNext={() => paginate(1)} initialPhoto={wineData.photo} updateData={updateData} />
+                    )}
+                    {step === 2 && (
+                        <Step2BasicInfo onNext={() => paginate(1)} initialData={wineData} updateData={updateData} />
+                    )}
+                    {step === 3 && (
+                        <Step3Taste onNext={() => paginate(1)} initialData={wineData} updateData={updateData} />
+                    )}
+                    {step === 4 && (
+                        <Step4Final onSubmit={handleStep4Submit} initialData={wineData} isSubmitting={isSubmitting} updateData={updateData} />
+                    )}
                 </motion.div>
             </AnimatePresence>
         </WizardLayout>
